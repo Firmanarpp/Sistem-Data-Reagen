@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PharmStock - Pharmaceutical Inventory Management System
 
-## Getting Started
+A professional, modern pharmaceutical inventory management system built with Next.js 14, TypeScript, Tailwind CSS, and Supabase. Designed for factory stock control in the pharmaceutical industry.
 
-First, run the development server:
+## ✨ Features
 
+- 📊 **Real-time Dashboard** - Monitor total reagents, low stock, expired items, and expiring soon
+- 🔍 **Advanced Search & Filtering** - Filter by type, expiry status, and stock levels
+- 📦 **Stock Management** - Easy stock in/out transactions with transaction history
+- ⚠️ **Smart Alerts** - Visual warnings for expired and expiring reagents
+- 📱 **Responsive Design** - Works seamlessly on desktop, tablet, and mobile
+- 🎨 **Professional UI** - Clean, intuitive interface for pharmaceutical operations
+- 🚀 **Vercel Ready** - Optimized for free deployment
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: Supabase (PostgreSQL)
+- **Icons**: Lucide React
+- **Deployment**: Vercel
+
+## 🚀 Quick Start
+
+### 1. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Setup Supabase
+- Create account at [supabase.com](https://supabase.com)
+- Create new project
+- Run SQL from `supabase-setup.sql` in SQL Editor
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Configure Environment
+Copy `.env.example` to `.env.local` and add your Supabase credentials:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run Development Server
+```bash
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+## 📊 Database Schema
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Reagents**: name, code, type (Cair/Padat), brand, stock, unit, expiry_date, arrival_date
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Transactions**: reagent_id, type (in/out), amount, old_stock, new_stock, notes
 
-## Deploy on Vercel
+## 🌐 Deploy to Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Push code to GitHub
+2. Import to [vercel.com](https://vercel.com)
+3. Add environment variables
+4. Deploy automatically
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📖 Usage
+
+- **Add Reagent**: Click "+ Add Reagent" button
+- **Manage Stock**: Click "Manage Stock" on any card
+- **Filter**: Use search and filter controls
+- **Alerts**: Red = Expired/Low Stock, Yellow = Expiring Soon
+
+## 🔒 Security
+
+⚠️ Default setup uses public access. For production:
+- Implement Supabase Auth
+- Update RLS policies
+- Add rate limiting
+
+## 📄 License
+
+MIT License
