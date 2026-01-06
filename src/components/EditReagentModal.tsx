@@ -14,7 +14,6 @@ export default function EditReagentModal({ reagent, onClose, onSuccess }: EditRe
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: reagent.name,
-    code: reagent.code,
     type: reagent.type || 'Cair',
     brand: reagent.brand || '',
     unit: reagent.unit,
@@ -31,7 +30,6 @@ export default function EditReagentModal({ reagent, onClose, onSuccess }: EditRe
         .from('reagents')
         .update({
           name: formData.name,
-          code: formData.code,
           type: formData.type,
           brand: formData.brand || null,
           unit: formData.unit,
@@ -70,19 +68,6 @@ export default function EditReagentModal({ reagent, onClose, onSuccess }: EditRe
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Code <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.code}
-              onChange={(e) => setFormData({ ...formData, code: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>

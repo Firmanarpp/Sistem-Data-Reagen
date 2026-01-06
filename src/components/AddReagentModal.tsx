@@ -13,7 +13,6 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
-    code: '',
     type: 'Cair' as 'Cair' | 'Padat' | 'Reagen Suhu 2-8°C',
     brand: '',
     stock: '',
@@ -31,7 +30,6 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
         .from('reagents')
         .insert([{
           name: formData.name,
-          code: formData.code,
           type: formData.type,
           brand: formData.brand || null,
           stock: parseFloat(formData.stock),
@@ -72,19 +70,6 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Code <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.code}
-              onChange={(e) => setFormData({ ...formData, code: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>

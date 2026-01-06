@@ -12,7 +12,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 export type Reagent = {
   id: string
   name: string
-  code: string
   type: 'Cair' | 'Padat' | 'Reagen Suhu 2-8°C' | null
   arrival_date: string | null
   expiry_date: string | null

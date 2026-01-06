@@ -78,7 +78,7 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
         <div className="flex justify-between items-center p-4 border-b border-gray-200 sticky top-0 bg-white">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Manage Stock</h2>
-            <p className="text-xs text-gray-600 mt-0.5">{reagent.name} ({reagent.code})</p>
+            <p className="text-xs text-gray-600 mt-0.5">{reagent.name}</p>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="h-5 w-5" />
