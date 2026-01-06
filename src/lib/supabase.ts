@@ -13,7 +13,7 @@ export type Reagent = {
   id: string
   name: string
   code: string
-  type: 'Cair' | 'Padat' | null
+  type: 'Cair' | 'Padat' | 'Reagen Suhu 2-8°C' | null
   arrival_date: string | null
   expiry_date: string | null
   brand: string | null
