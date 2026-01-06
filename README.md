@@ -40,6 +40,8 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 ```
 
+**Get these values from**: Supabase Dashboard → Project Settings → API
+
 ### 4. Run Development Server
 ```bash
 npm run dev
@@ -55,10 +57,35 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ## 🌐 Deploy to Vercel
 
-1. Push code to GitHub
-2. Import to [vercel.com](https://vercel.com)
-3. Add environment variables
-4. Deploy automatically
+1. **Push to GitHub** (Already done ✅)
+   ```bash
+   git push origin main
+   ```
+
+2. **Import to Vercel**
+   - Go to [vercel.com](https://vercel.com) and sign in with GitHub
+   - Click "Add New Project"
+   - Select your `Sistem-Data-Reagen` repository
+   - Click "Import"
+
+3. **Configure Environment Variables** ⚠️ IMPORTANT
+   - Before deploying, add these environment variables in Vercel:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://omordpoktvfysdlcgeim.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+   ```
+   - Get from: `.env.local` file or Supabase Dashboard → Project Settings → API
+
+4. **Deploy**
+   - Click "Deploy"
+   - Wait for build to complete
+   - Your app will be live at `your-project.vercel.app`
+
+### Troubleshooting Build Errors
+
+If you get "supabaseUrl is required" error:
+- Make sure environment variables are set in Vercel dashboard
+- Variables must start with `NEXT_PUBLIC_` to be accessible in client
 
 ## 📖 Usage
 
