@@ -14,7 +14,7 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
   const [formData, setFormData] = useState({
     name: '',
     code: '',
-    type: 'Cair' as 'Cair' | 'Padat',
+    type: 'Cair' as 'Cair' | 'Padat' | 'Reagen Suhu 2-8°C',
     brand: '',
     stock: '',
     unit: 'ml',
