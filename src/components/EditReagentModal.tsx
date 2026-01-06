@@ -1,25 +1,25 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { X, Plus } from 'lucide-react'
+import { supabase, type Reagent } from '@/lib/supabase'
+import { X, Save } from 'lucide-react'
 
-interface AddReagentModalProps {
+interface EditReagentModalProps {
+  reagent: Reagent
   onClose: () => void
   onSuccess: () => void
 }
 
-export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalProps) {
+export default function EditReagentModal({ reagent, onClose, onSuccess }: EditReagentModalProps) {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
-    name: '',
-    code: '',
-    type: 'Cair' as 'Cair' | 'Padat',
-    brand: '',
-    stock: '',
-    unit: 'ml',
-    expiry_date: '',
-    arrival_date: ''
+    name: reagent.name,
+    code: reagent.code,
+    type: reagent.type || 'Cair',
+    brand: reagent.brand || '',
+    unit: reagent.unit,
+    expiry_date: reagent.expiry_date || '',
+    arrival_date: reagent.arrival_date || ''
   })
 
   async function handleSubmit(e: React.FormEvent) {
@@ -29,24 +29,22 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
     try {
       const { error } = await supabase
         .from('reagents')
-        .insert([{
+        .update({
           name: formData.name,
           code: formData.code,
           type: formData.type,
           brand: formData.brand || null,
-          stock: parseFloat(formData.stock),
-          stock_in: parseFloat(formData.stock),
-          stock_out: 0,
           unit: formData.unit,
           expiry_date: formData.expiry_date || null,
           arrival_date: formData.arrival_date || null
-        }])
+        })
+        .eq('id', reagent.id)
 
       if (error) throw error
       onSuccess()
     } catch (error) {
-      console.error('Error adding reagent:', error)
-      alert('Failed to add reagent. Please try again.')
+      console.error('Error updating reagent:', error)
+      alert('Failed to update reagent. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -56,7 +54,7 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
     <div className="fixed inset-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Add New Reagent</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Edit Reagent</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X className="h-6 w-6" />
           </button>
@@ -94,7 +92,7 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
               <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
               <select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value as 'Cair' | 'Padat' })}
+                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="Cair">Cair</option>
@@ -114,35 +112,18 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Initial Stock <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                required
-                step="0.1"
-                min="0"
-                value={formData.stock}
-                onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Unit</label>
-              <select
-                value={formData.unit}
-                onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="ml">ml</option>
-                <option value="L">L</option>
-                <option value="g">g</option>
-                <option value="kg">kg</option>
-              </select>
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+            <select
+              value={formData.unit}
+              onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="ml">ml</option>
+              <option value="L">L</option>
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+            </select>
           </div>
 
           <div>
@@ -165,6 +146,10 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
             />
           </div>
 
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+            <strong>Note:</strong> Stock values cannot be changed here. Use "Manage Stock" button to adjust stock levels.
+          </div>
+
           <div className="flex gap-3 pt-4">
             <button
               type="button"
@@ -178,10 +163,10 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
               disabled={loading}
               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {loading ? 'Adding...' : (
+              {loading ? 'Saving...' : (
                 <>
-                  <Plus className="h-4 w-4" />
-                  Add Reagent
+                  <Save className="h-4 w-4" />
+                  Save Changes
                 </>
               )}
             </button>

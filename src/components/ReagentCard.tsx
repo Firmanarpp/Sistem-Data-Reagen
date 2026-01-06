@@ -5,6 +5,7 @@ import { type Reagent } from '@/lib/supabase'
 import { formatDate, getExpiryStatus, getStockLevel, cn } from '@/lib/utils'
 import { Package, Calendar, AlertCircle, TrendingUp, Edit } from 'lucide-react'
 import StockModal from './StockModal'
+import EditReagentModal from './EditReagentModal'
 
 interface ReagentCardProps {
   reagent: Reagent
@@ -13,6 +14,7 @@ interface ReagentCardProps {
 
 export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
   const [showStockModal, setShowStockModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   
   const expiryStatus = getExpiryStatus(reagent.expiry_date)
   const stockLevel = getStockLevel(reagent.stock)
@@ -38,14 +40,23 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
             <h3 className="text-lg font-semibold text-gray-900 mb-1">{reagent.name}</h3>
             <p className="text-sm text-gray-500 font-mono">{reagent.code}</p>
           </div>
-          {expiryStatus !== 'none' && expiryStatus !== 'valid' && (
-            <span className={cn(
-              'px-2 py-1 rounded-md text-xs font-medium border',
-              expiryBadgeClass[expiryStatus]
-            )}>
-              {expiryStatus === 'expired' ? '⚠️ Expired' : '⏰ Expiring'}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowEditModal(true)}
+              className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              title="Edit reagent"
+            >
+              <Edit className="h-4 w-4" />
+            </button>
+            {expiryStatus !== 'none' && expiryStatus !== 'valid' && (
+              <span className={cn(
+                'px-2 py-1 rounded-md text-xs font-medium border',
+                expiryBadgeClass[expiryStatus]
+              )}>
+                {expiryStatus === 'expired' ? '⚠️ Expired' : '⏰ Expiring'}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="space-y-2 mb-4">
@@ -108,6 +119,17 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
           onSuccess={() => {
             onUpdate()
             setShowStockModal(false)
+          }}
+        />
+      )}
+
+      {showEditModal && (
+        <EditReagentModal
+          reagent={reagent}
+          onClose={() => setShowEditModal(false)}
+          onSuccess={() => {
+            onUpdate()
+            setShowEditModal(false)
           }}
         />
       )}
