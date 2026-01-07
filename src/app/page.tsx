@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { supabase, type Reagent } from '@/lib/supabase'
-import { Package, AlertTriangle, TrendingUp, Activity, Search, Plus } from 'lucide-react'
+import { Package, AlertTriangle, TrendingUp, Activity, Search, Plus, History } from 'lucide-react'
 import ReagentCard from '@/components/ReagentCard'
 import StatsCard from '@/components/StatsCard'
 import FilterBar from '@/components/FilterBar'
 import AddReagentModal from '@/components/AddReagentModal'
 import { getExpiryStatus, getStockLevel } from '@/lib/utils'
+import Link from 'next/link'
 
 export default function DashboardPage() {
   const [reagents, setReagents] = useState<Reagent[]>([])
@@ -79,13 +80,22 @@ export default function DashboardPage() {
               </h1>
               <p className="text-sm text-gray-600 mt-1">Pharmaceutical Inventory Management System</p>
             </div>
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
-            >
-              <Plus className="h-5 w-5" />
-              Add Reagent
-            </button>
+            <div className="flex gap-2">
+              <Link
+                href="/history"
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+              >
+                <History className="h-5 w-5" />
+                History
+              </Link>
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+              >
+                <Plus className="h-5 w-5" />
+                Add Reagent
+              </button>
+            </div>
           </div>
         </div>
       </header>

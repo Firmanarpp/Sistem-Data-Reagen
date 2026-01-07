@@ -16,6 +16,7 @@ export default function EditReagentModal({ reagent, onClose, onSuccess }: EditRe
     name: reagent.name,
     type: reagent.type || 'Cair',
     brand: reagent.brand || '',
+    batch_number: reagent.batch_number || '',
     unit: reagent.unit,
     expiry_date: reagent.expiry_date || '',
     arrival_date: reagent.arrival_date || ''
@@ -32,6 +33,7 @@ export default function EditReagentModal({ reagent, onClose, onSuccess }: EditRe
           name: formData.name,
           type: formData.type,
           brand: formData.brand || null,
+          batch_number: formData.batch_number || null,
           unit: formData.unit,
           expiry_date: formData.expiry_date || null,
           arrival_date: formData.arrival_date || null
@@ -95,6 +97,17 @@ export default function EditReagentModal({ reagent, onClose, onSuccess }: EditRe
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">No. Batch</label>
+            <input
+              type="text"
+              value={formData.batch_number}
+              onChange={(e) => setFormData({ ...formData, batch_number: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="e.g., D098301"
+            />
           </div>
 
           <div>

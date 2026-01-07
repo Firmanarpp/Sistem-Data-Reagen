@@ -15,6 +15,7 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
     name: '',
     type: 'Cair' as 'Cair' | 'Padat' | 'Reagen Suhu 2-8°C',
     brand: '',
+    batch_number: '',
     stock: '',
     unit: 'ml',
     expiry_date: '',
@@ -32,6 +33,7 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
           name: formData.name,
           type: formData.type,
           brand: formData.brand || null,
+          batch_number: formData.batch_number || null,
           stock: parseFloat(formData.stock),
           stock_in: parseFloat(formData.stock),
           stock_out: 0,
@@ -97,6 +99,17 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">No. Batch</label>
+            <input
+              type="text"
+              value={formData.batch_number}
+              onChange={(e) => setFormData({ ...formData, batch_number: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="e.g., D098301"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">

@@ -72,6 +72,12 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
               <span className="ml-1">{reagent.brand}</span>
             </div>
           )}
+          {reagent.batch_number && (
+            <div className="flex items-center text-sm text-gray-600">
+              <span className="font-medium">No. Batch:</span>
+              <span className="ml-1">{reagent.batch_number}</span>
+            </div>
+          )}
           {reagent.arrival_date && (
             <div className="flex items-center text-sm text-gray-600">
               <Calendar className="h-4 w-4 mr-2" />
