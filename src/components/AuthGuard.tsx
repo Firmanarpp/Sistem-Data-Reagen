@@ -18,15 +18,17 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         router.push('/login')
       } else if (event === 'SIGNED_IN') {
         setAuthenticated(true)
+        setLoading(false)
       }
     })
 
     return () => {
       subscription.unsubscribe()
     }
-  }, [router])
+  }, [router, pathname])
 
   async function checkAuth() {
+    setLoading(true)
     try {
       const { data: { session } } = await supabase.auth.getSession()
       
@@ -47,6 +49,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }
 
+  // Show loading screen during auth check or redirect
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -58,5 +61,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     )
   }
 
+  // Only render children after auth check is complete and user is authorized
   return <>{children}</>
 }
