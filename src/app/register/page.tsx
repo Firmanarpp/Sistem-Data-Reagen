@@ -10,6 +10,7 @@ export default function RegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [fullName, setFullName] = useState('')
@@ -33,18 +34,48 @@ export default function RegisterPage() {
       return
     }
 
+    if (username.length < 3) {
+      setError('Username must be at least 3 characters')
+      setLoading(false)
+      return
+    }
+
     try {
+      // Check if username already exists
+      const { data: existingUser } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('username', username.toLowerCase())
+        .single()
+
+      if (existingUser) {
+        setError('Username already taken')
+        setLoading(false)
+        return
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            full_name: fullName
+            full_name: fullName,
+            username: username.toLowerCase()
           }
         }
       })
 
       if (error) throw error
+
+      // Create profile with username
+      if (data.user) {
+        await supabase.from('profiles').insert({
+          id: data.user.id,
+          username: username.toLowerCase(),
+          full_name: fullName,
+          email: email
+        })
+      }
 
       setSuccess(true)
       setTimeout(() => {
@@ -97,6 +128,26 @@ export default function RegisterPage() {
                   placeholder="John Doe"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Username
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="johndoe"
+                  pattern="[a-z0-9_]+"
+                  title="Only lowercase letters, numbers, and underscores"
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Minimum 3 characters, lowercase only</p>
             </div>
 
             <div>
