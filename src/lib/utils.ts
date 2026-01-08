@@ -20,8 +20,8 @@ export function getExpiryStatus(expiryDate: string | null): 'expired' | 'expirin
 }
 
 export function getStockLevel(stock: number): 'low' | 'medium' | 'high' {
-  if (stock < 100) return 'low'
-  if (stock <= 1000) return 'medium'
+  if (stock < 50) return 'low'
+  if (stock <= 500) return 'medium'
   return 'high'
 }
 
