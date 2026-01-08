@@ -2,15 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import { supabase, type Reagent } from '@/lib/supabase'
-import { Package, AlertTriangle, TrendingUp, Activity, Search, Plus, History } from 'lucide-react'
+import { Package, AlertTriangle, TrendingUp, Activity, Search, Plus, History, LogOut } from 'lucide-react'
 import ReagentCard from '@/components/ReagentCard'
 import StatsCard from '@/components/StatsCard'
 import FilterBar from '@/components/FilterBar'
 import AddReagentModal from '@/components/AddReagentModal'
 import { getExpiryStatus, getStockLevel } from '@/lib/utils'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function DashboardPage() {
+  const router = useRouter()
   const [reagents, setReagents] = useState<Reagent[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -18,10 +20,22 @@ export default function DashboardPage() {
   const [expiryFilter, setExpiryFilter] = useState('')
   const [stockFilter, setStockFilter] = useState('')
   const [showAddModal, setShowAddModal] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
 
   useEffect(() => {
     loadReagents()
+    loadUser()
   }, [])
+
+  async function loadUser() {
+    const { data: { user } } = await supabase.auth.getUser()
+    setUserEmail(user?.email || '')
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   async function loadReagents() {
     try {
@@ -78,7 +92,10 @@ export default function DashboardPage() {
                 <Package className="h-7 w-7 text-blue-600" />
                 PharmStock
               </h1>
-              <p className="text-sm text-gray-600 mt-1">Pharmaceutical Inventory Management System</p>
+              <p className="text-sm text-gray-600 mt-1">
+                {userEmail && <span className="font-medium">{userEmail}</span>}
+                {userEmail && ' • '}Pharmaceutical Inventory Management System
+              </p>
             </div>
             <div className="flex gap-2">
               <Link
@@ -94,6 +111,13 @@ export default function DashboardPage() {
               >
                 <Plus className="h-5 w-5" />
                 Add Reagent
+              </button>
+              <button
+                onClick={handleLogout}
+                className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                title="Logout"
+              >
+                <LogOut className="h-5 w-5" />
               </button>
             </div>
           </div>
