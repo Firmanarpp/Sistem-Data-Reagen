@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase, type Reagent } from '@/lib/supabase'
-import { Package, AlertTriangle, TrendingUp, Activity, Search, Plus, History, LogOut } from 'lucide-react'
+import { Package, AlertTriangle, TrendingUp, Activity, Search, Plus, History, LogOut, Menu, X } from 'lucide-react'
 import ReagentCard from '@/components/ReagentCard'
 import StatsCard from '@/components/StatsCard'
 import FilterBar from '@/components/FilterBar'
@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const [stockFilter, setStockFilter] = useState('')
   const [showAddModal, setShowAddModal] = useState(false)
   const [userEmail, setUserEmail] = useState('')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     loadReagents()
@@ -84,43 +85,101 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <Package className="h-7 w-7 text-blue-600" />
-                PharmStock
-              </h1>
-              <p className="text-sm text-gray-600 mt-1">
-                {userEmail && <span className="font-medium">{userEmail}</span>}
-                {userEmail && ' • '}Pharmaceutical Inventory Management System
-              </p>
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo & Brand */}
+            <div className="flex items-center gap-2">
+              <Package className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900">
+                  PharmStock
+                </h1>
+                {userEmail && (
+                  <p className="hidden sm:block text-xs text-gray-500">
+                    {userEmail}
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="flex gap-2">
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-3">
               <Link
                 href="/history"
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50 flex items-center gap-2 transition-colors text-sm font-medium"
               >
-                <History className="h-5 w-5" />
-                History
+                <History className="h-4 w-4" />
+                <span>History</span>
               </Link>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm font-medium shadow-sm"
               >
-                <Plus className="h-5 w-5" />
-                Add Reagent
+                <Plus className="h-4 w-4" />
+                <span>Add Reagent</span>
               </button>
               <button
                 onClick={handleLogout}
-                className="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+                className="text-red-600 hover:text-red-700 px-3 py-2 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-colors text-sm font-medium"
                 title="Logout"
               >
-                <LogOut className="h-5 w-5" />
+                <LogOut className="h-4 w-4" />
+                <span className="hidden lg:inline">Logout</span>
               </button>
-            </div>
+            </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
           </div>
+
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-gray-200">
+              <nav className="flex flex-col gap-2">
+                {userEmail && (
+                  <div className="px-3 py-2 text-sm text-gray-600 bg-gray-50 rounded-lg mb-2">
+                    {userEmail}
+                  </div>
+                )}
+                <Link
+                  href="/history"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2.5 rounded-lg hover:bg-gray-50 flex items-center gap-3 transition-colors font-medium"
+                >
+                  <History className="h-5 w-5" />
+                  <span>History</span>
+                </Link>
+                <button
+                  onClick={() => {
+                    setShowAddModal(true)
+                    setMobileMenuOpen(false)
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2.5 rounded-lg flex items-center gap-3 transition-colors font-medium text-left"
+                >
+                  <Plus className="h-5 w-5" />
+                  <span>Add Reagent</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="text-red-600 hover:text-red-700 px-3 py-2.5 rounded-lg hover:bg-red-50 flex items-center gap-3 transition-colors font-medium text-left"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Logout</span>
+                </button>
+              </nav>
+            </div>
+          )}
         </div>
       </header>
 
