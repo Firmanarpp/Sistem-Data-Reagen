@@ -26,7 +26,7 @@ export default function FilterBar({
         onChange={(e) => onTypeChange(e.target.value)}
         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
       >
-        <option value="">All Types</option>
+        <option value="">Semua Jenis</option>
         <option value="Cair">Cair</option>
         <option value="Padat">Padat</option>
         <option value="Reagen Suhu 2-8°C">Reagen Suhu 2-8°C</option>
@@ -37,9 +37,9 @@ export default function FilterBar({
         onChange={(e) => onExpiryChange(e.target.value)}
         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
       >
-        <option value="">All Status</option>
-        <option value="expired">Expired</option>
-        <option value="expiring">Expiring Soon</option>
+        <option value="">Semua Status</option>
+        <option value="expired">Kadaluarsa</option>
+        <option value="expiring">Akan Kadaluarsa</option>
         <option value="valid">Valid</option>
       </select>
 
@@ -48,10 +48,10 @@ export default function FilterBar({
         onChange={(e) => onStockChange(e.target.value)}
         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
       >
-        <option value="">All Stock Levels</option>
-        <option value="low">Low Stock</option>
-        <option value="medium">Medium Stock</option>
-        <option value="high">High Stock</option>
+        <option value="">Semua Level Stok</option>
+        <option value="low">Stok Rendah</option>
+        <option value="medium">Stok Sedang</option>
+        <option value="high">Stok Tinggi</option>
       </select>
 
       <button

@@ -106,9 +106,9 @@ export default function TransactionHistoryPage() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                 <Package className="h-7 w-7 text-blue-600" />
-                Transaction History
+                Riwayat Transaksi
               </h1>
-              <p className="text-sm text-gray-600 mt-1">Stock management transaction records</p>
+              <p className="text-sm text-gray-600 mt-1">Catatan transaksi pengelolaan stok</p>
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function TransactionHistoryPage() {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
               <input
                 type="date"
                 value={startDate}
@@ -127,7 +127,7 @@ export default function TransactionHistoryPage() {
               />
             </div>
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Tanggal Akhir</label>
               <input
                 type="date"
                 value={endDate}
@@ -150,7 +150,7 @@ export default function TransactionHistoryPage() {
           
           {filteredTransactions.length !== transactions.length && (
             <div className="mt-4 text-sm text-gray-600">
-              Showing <span className="font-semibold">{filteredTransactions.length}</span> of <span className="font-semibold">{transactions.length}</span> transactions
+              Menampilkan <span className="font-semibold">{filteredTransactions.length}</span> dari <span className="font-semibold">{transactions.length}</span> transaksi
             </div>
           )}
         </div>
@@ -158,14 +158,14 @@ export default function TransactionHistoryPage() {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="mt-4 text-gray-600">Loading transactions...</p>
+            <p className="mt-4 text-gray-600">Memuat transaksi...</p>
           </div>
         ) : filteredTransactions.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
             <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 text-lg">No transactions found</p>
+            <p className="text-gray-600 text-lg">Tidak ada transaksi ditemukan</p>
             <p className="text-gray-500 text-sm mt-2">
-              {transactions.length === 0 ? 'No stock transactions recorded yet' : 'Try adjusting your date filters'}
+              {transactions.length === 0 ? 'Belum ada transaksi stok yang dicatat' : 'Coba sesuaikan filter tanggal Anda'}
             </p>
           </div>
         ) : (
@@ -174,13 +174,13 @@ export default function TransactionHistoryPage() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reagent</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Old Stock</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">New Stock</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal & Waktu</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reagen</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Lama</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Baru</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catatan</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -196,12 +196,12 @@ export default function TransactionHistoryPage() {
                         {transaction.type === 'in' ? (
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             <ArrowUpCircle className="h-3 w-3 mr-1" />
-                            Stock In
+                            Stok Masuk
                           </span>
                         ) : (
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                             <ArrowDownCircle className="h-3 w-3 mr-1" />
-                            Stock Out
+                            Stok Keluar
                           </span>
                         )}
                       </td>

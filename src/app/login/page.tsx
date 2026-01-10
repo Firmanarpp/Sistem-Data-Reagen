@@ -31,7 +31,7 @@ export default function LoginPage() {
           .single()
 
         if (profileError || !profile) {
-          throw new Error('Username not found')
+          throw new Error('Username tidak ditemukan')
         }
 
         loginEmail = profile.email
@@ -47,7 +47,7 @@ export default function LoginPage() {
       router.push('/')
       router.refresh()
     } catch (error: any) {
-      setError(error.message || 'Failed to login')
+      setError(error.message || 'Gagal masuk')
     } finally {
       setLoading(false)
     }
@@ -62,7 +62,7 @@ export default function LoginPage() {
               <Package className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900">PharmStock</h1>
-            <p className="text-gray-600 mt-2">Sign in to your account</p>
+            <p className="text-gray-600 mt-2">Masuk ke akun Anda</p>
           </div>
 
           {error && (
@@ -74,7 +74,7 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email or Username
+                Email atau Username
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -84,14 +84,14 @@ export default function LoginPage() {
                   value={emailOrUsername}
                   onChange={(e) => setEmailOrUsername(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="email or username"
+                  placeholder="email atau username"
                 />
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                Kata Sandi
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -111,9 +111,9 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium"
             >
-              {loading ? 'Signing in...' : (
+              {loading ? 'Masuk...' : (
                 <>
-                  Sign In
+                  Masuk
                   <ArrowRight className="h-5 w-5" />
                 </>
               )}
@@ -122,16 +122,16 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Belum punya akun?{' '}
               <Link href="/register" className="text-blue-600 hover:text-blue-700 font-medium">
-                Create account
+                Buat akun
               </Link>
             </p>
           </div>
         </div>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-          Pharmaceutical Inventory Management System
+          Sistem Manajemen Inventori Farmasi
         </p>
       </div>
     </div>

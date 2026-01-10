@@ -17,18 +17,47 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
   const [amount, setAmount] = useState('')
   const [notes, setNotes] = useState('')
 
+  async function sendEmailNotification(userEmail: string, details: any) {
+    try {
+      // Call Supabase Edge Function for email
+      await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-stock-notification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          to: userEmail,
+          reagentName: details.reagentName,
+          transactionType: details.transactionType,
+          amount: details.amount,
+          oldStock: details.oldStock,
+          newStock: details.newStock,
+          unit: details.unit,
+          notes: details.notes
+        })
+      })
+    } catch (error) {
+      console.error('Error sending email:', error)
+      // Don't throw - email is not critical
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
 
     try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      
       const numAmount = parseFloat(amount)
       const oldStock = reagent.stock
       let newStock = oldStock
 
       if (transactionType === 'out') {
         if (oldStock < numAmount) {
-          alert('Insufficient stock!')
+          alert('Stok tidak mencukupi!')
           setLoading(false)
           return
         }
@@ -63,10 +92,23 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
 
       if (transactionError) throw transactionError
 
+      // Send email notification
+      if (user?.email) {
+        await sendEmailNotification(user.email, {
+          reagentName: reagent.name,
+          transactionType: transactionType === 'in' ? 'Stok Masuk' : 'Stok Keluar',
+          amount: numAmount,
+          oldStock: oldStock,
+          newStock: newStock,
+          unit: reagent.unit,
+          notes: notes || '-'
+        })
+      }
+
       onSuccess()
     } catch (error) {
       console.error('Error updating stock:', error)
-      alert('Failed to update stock. Please try again.')
+      alert('Gagal memperbarui stok. Silakan coba lagi.')
     } finally {
       setLoading(false)
     }
@@ -77,7 +119,7 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center p-4 border-b border-gray-200 sticky top-0 bg-white">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Manage Stock</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Kelola Stok</h2>
             <p className="text-xs text-gray-600 mt-0.5">{reagent.name}</p>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
@@ -88,7 +130,7 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
         <div className="p-4">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Current Stock</span>
+              <span className="text-sm text-gray-600">Stok Saat Ini</span>
               <span className="text-xl font-bold text-blue-600">
                 {reagent.stock.toFixed(1)} {reagent.unit}
               </span>
@@ -96,14 +138,14 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
             {reagent.expiry_date && (
               <div className="text-xs text-gray-600 mt-1.5 flex items-center gap-1">
                 <Clock className="h-3 w-3" />
-                Expires: {formatDate(reagent.expiry_date)}
+                Kadaluarsa: {formatDate(reagent.expiry_date)}
               </div>
             )}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Transaction Type</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Jenis Transaksi</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -115,7 +157,7 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
                   }`}
                 >
                   <ArrowUpCircle className="h-4 w-4" />
-                  Stock In
+                  Stok Masuk
                 </button>
                 <button
                   type="button"
@@ -127,14 +169,14 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
                   }`}
                 >
                   <ArrowDownCircle className="h-4 w-4" />
-                  Stock Out
+                  Stok Keluar
                 </button>
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Amount ({reagent.unit}) <span className="text-red-500">*</span>
+                Jumlah ({reagent.unit}) <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -144,37 +186,37 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                placeholder="Enter amount"
+                placeholder="Masukkan jumlah"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Notes (Optional)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Catatan (Opsional)</label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={2}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                placeholder="Add notes about this transaction..."
+                placeholder="Tambahkan catatan untuk transaksi ini..."
               />
             </div>
 
             {amount && (
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                <div className="text-xs text-gray-600 mb-1.5 font-medium">Preview:</div>
+                <div className="text-xs text-gray-600 mb-1.5 font-medium">Pratinjau:</div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Current Stock:</span>
+                  <span className="text-gray-600">Stok Saat Ini:</span>
                   <span className="font-semibold">{reagent.stock.toFixed(1)} {reagent.unit}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm mt-1">
-                  <span className="text-gray-600">{transactionType === 'in' ? 'Adding:' : 'Removing:'}</span>
+                  <span className="text-gray-600">{transactionType === 'in' ? 'Menambah:' : 'Mengurangi:'}</span>
                   <span className={`font-semibold ${transactionType === 'in' ? 'text-green-600' : 'text-red-600'}`}>
                     {transactionType === 'in' ? '+' : '-'}{parseFloat(amount || '0').toFixed(1)} {reagent.unit}
                   </span>
                 </div>
                 <div className="border-t border-gray-300 my-1.5"></div>
                 <div className="flex items-center justify-between text-sm font-bold">
-                  <span className="text-gray-700">New Stock:</span>
+                  <span className="text-gray-700">Stok Baru:</span>
                   <span className="text-blue-600">
                     {(transactionType === 'in' 
                       ? reagent.stock + parseFloat(amount || '0')
@@ -191,14 +233,14 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
                 onClick={onClose}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm"
               >
-                Cancel
+                Batal
               </button>
               <button
                 type="submit"
                 disabled={loading}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
-                {loading ? 'Processing...' : 'Confirm Transaction'}
+                {loading ? 'Memproses...' : 'Konfirmasi Transaksi'}
               </button>
             </div>
           </form>

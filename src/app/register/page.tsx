@@ -23,19 +23,19 @@ export default function RegisterPage() {
     setError('')
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match')
+      setError('Kata sandi tidak cocok')
       setLoading(false)
       return
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters')
+      setError('Kata sandi minimal 6 karakter')
       setLoading(false)
       return
     }
 
     if (username.length < 3) {
-      setError('Username must be at least 3 characters')
+      setError('Username minimal 3 karakter')
       setLoading(false)
       return
     }
@@ -49,7 +49,7 @@ export default function RegisterPage() {
         .single()
 
       if (existingUser) {
-        setError('Username already taken')
+        setError('Username sudah digunakan')
         setLoading(false)
         return
       }
@@ -82,7 +82,7 @@ export default function RegisterPage() {
         router.push('/login')
       }, 2000)
     } catch (error: any) {
-      setError(error.message || 'Failed to create account')
+      setError(error.message || 'Gagal membuat akun')
     } finally {
       setLoading(false)
     }
@@ -97,7 +97,7 @@ export default function RegisterPage() {
               <Package className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900">PharmStock</h1>
-            <p className="text-gray-600 mt-2">Create your account</p>
+            <p className="text-gray-600 mt-2">Buat akun Anda</p>
           </div>
 
           {error && (
@@ -108,14 +108,14 @@ export default function RegisterPage() {
 
           {success && (
             <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4 text-sm">
-              Account created successfully! Redirecting to login...
+              Akun berhasil dibuat! Mengalihkan ke halaman login...
             </div>
           )}
 
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Full Name
+                Nama Lengkap
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -144,15 +144,15 @@ export default function RegisterPage() {
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="johndoe"
                   pattern="[a-z0-9_]+"
-                  title="Only lowercase letters, numbers, and underscores"
+                  title="Hanya huruf kecil, angka, dan garis bawah"
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">Minimum 3 characters, lowercase only</p>
+              <p className="text-xs text-gray-500 mt-1">Minimal 3 karakter, huruf kecil saja</p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                Alamat Email
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -169,7 +169,7 @@ export default function RegisterPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                Kata Sandi
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -182,12 +182,12 @@ export default function RegisterPage() {
                   placeholder="••••••••"
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
+              <p className="text-xs text-gray-500 mt-1">Minimal 6 karakter</p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
+                Konfirmasi Kata Sandi
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -207,9 +207,9 @@ export default function RegisterPage() {
               disabled={loading || success}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium"
             >
-              {loading ? 'Creating account...' : success ? 'Account created!' : (
+              {loading ? 'Membuat akun...' : success ? 'Akun berhasil dibuat!' : (
                 <>
-                  Create Account
+                  Buat Akun
                   <ArrowRight className="h-5 w-5" />
                 </>
               )}
@@ -218,16 +218,16 @@ export default function RegisterPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
+              Sudah punya akun?{' '}
               <Link href="/login" className="text-blue-600 hover:text-blue-700 font-medium">
-                Sign in
+                Masuk
               </Link>
             </p>
           </div>
         </div>
 
         <p className="text-center text-sm text-gray-600 mt-6">
-          Pharmaceutical Inventory Management System
+          Sistem Manajemen Inventori Farmasi
         </p>
       </div>
     </div>

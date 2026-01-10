@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { type Reagent } from '@/lib/supabase'
+import { supabase, type Reagent } from '@/lib/supabase'
 import { formatDate, getExpiryStatus, getStockLevel, cn } from '@/lib/utils'
-import { Package, Calendar, AlertCircle, TrendingUp, Edit } from 'lucide-react'
+import { Package, Calendar, AlertCircle, TrendingUp, Edit, Trash2 } from 'lucide-react'
 import StockModal from './StockModal'
 import EditReagentModal from './EditReagentModal'
 
@@ -15,6 +15,28 @@ interface ReagentCardProps {
 export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
   const [showStockModal, setShowStockModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  async function handleDelete() {
+    if (!confirm(`Apakah Anda yakin ingin menghapus reagen "${reagent.name}"?`)) return
+    
+    setIsDeleting(true)
+    try {
+      const { error } = await supabase
+        .from('reagents')
+        .delete()
+        .eq('id', reagent.id)
+      
+      if (error) throw error
+      alert('Reagen berhasil dihapus')
+      onUpdate()
+    } catch (error) {
+      console.error('Error deleting reagent:', error)
+      alert('Gagal menghapus reagen. Silakan coba lagi.')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
   
   const expiryStatus = getExpiryStatus(reagent.expiry_date)
   const stockLevel = getStockLevel(reagent.stock)
@@ -43,16 +65,24 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
             <button
               onClick={() => setShowEditModal(true)}
               className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              title="Edit reagent"
+              title="Edit reagen"
             >
               <Edit className="h-4 w-4" />
+            </button>
+            <button
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+              title="Hapus reagen"
+            >
+              <Trash2 className="h-4 w-4" />
             </button>
             {expiryStatus !== 'none' && expiryStatus !== 'valid' && (
               <span className={cn(
                 'px-2 py-1 rounded-md text-xs font-medium border',
                 expiryBadgeClass[expiryStatus]
               )}>
-                {expiryStatus === 'expired' ? '⚠️ Expired' : '⏰ Expiring'}
+                {expiryStatus === 'expired' ? '⚠️ Kadaluarsa' : '⏰ Akan Kadaluarsa'}
               </span>
             )}
           </div>
@@ -62,13 +92,13 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
           {reagent.type && (
             <div className="flex items-center text-sm text-gray-600">
               <Package className="h-4 w-4 mr-2" />
-              <span className="font-medium">Type:</span>
+              <span className="font-medium">Jenis:</span>
               <span className="ml-1">{reagent.type}</span>
             </div>
           )}
           {reagent.brand && (
             <div className="flex items-center text-sm text-gray-600">
-              <span className="font-medium">Brand:</span>
+              <span className="font-medium">Merek:</span>
               <span className="ml-1">{reagent.brand}</span>
             </div>
           )}
@@ -81,14 +111,14 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
           {reagent.arrival_date && (
             <div className="flex items-center text-sm text-gray-600">
               <Calendar className="h-4 w-4 mr-2" />
-              <span className="font-medium">Arrival:</span>
+              <span className="font-medium">Tgl Masuk:</span>
               <span className="ml-1">{formatDate(reagent.arrival_date)}</span>
             </div>
           )}
           {reagent.expiry_date && (
             <div className="flex items-center text-sm text-gray-600">
               <Calendar className="h-4 w-4 mr-2" />
-              <span className="font-medium">Expiry:</span>
+              <span className="font-medium">Tgl Kadaluarsa:</span>
               <span className="ml-1">{formatDate(reagent.expiry_date)}</span>
             </div>
           )}
@@ -96,7 +126,7 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
 
         <div className="bg-gray-50 rounded-lg p-4 mb-4">
           <div className="flex items-baseline justify-between">
-            <span className="text-sm text-gray-600">Current Stock</span>
+            <span className="text-sm text-gray-600">Stok Saat Ini</span>
             <div className="text-right">
               <span className={cn(
                 'text-2xl font-bold',
@@ -110,7 +140,7 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
           {stockLevel === 'low' && (
             <div className="flex items-center text-xs text-red-600 mt-2">
               <AlertCircle className="h-3 w-3 mr-1" />
-              Low stock alert
+              Stok menipis
             </div>
           )}
         </div>
@@ -120,7 +150,7 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           <TrendingUp className="h-4 w-4" />
-          Manage Stock
+          Kelola Stok
         </button>
       </div>
 
