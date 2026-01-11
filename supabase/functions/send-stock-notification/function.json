@@ -1,0 +1,6 @@
+{
+  "name": "send-stock-notification",
+  "version": "1.0.0",
+  "description": "Send email notifications for stock changes using Supabase Auth",
+  "runtime": "deno"
+}

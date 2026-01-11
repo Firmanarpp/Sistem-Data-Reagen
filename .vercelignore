@@ -1,0 +1,11 @@
+# Supabase Edge Functions
+# (These are deployed separately to Supabase, not to Vercel)
+supabase/functions
+
+# Supabase temporary files
+supabase/.branches
+supabase/.temp
+
+# Documentation files (optional, dapat diaktifkan jika ingin file doc tidak di-deploy)
+# *.md
+# !README.md
