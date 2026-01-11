@@ -1,7 +1,7 @@
 // @ts-ignore: Deno global is available in Deno runtime
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-// @ts-ignore: Deno import from URL
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+// @ts-ignore: Deno import
+import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,21 +17,16 @@ serve(async (req: Request) => {
 
   try {
     const { to, reagentName, transactionType, amount, oldStock, newStock, unit, notes } = await req.json()
-
-    // Create Supabase Admin Client
+    
+    // Get config from environment
     // @ts-ignore: Deno global is available in Deno runtime
-    const supabaseAdmin = createClient(
-      // @ts-ignore: Deno global is available in Deno runtime
-      Deno.env.get('SUPABASE_URL') ?? '',
-      // @ts-ignore: Deno global is available in Deno runtime
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    const USE_GMAIL = Deno.env.get('USE_GMAIL') === 'true'
+    // @ts-ignore: Deno global is available in Deno runtime
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
+    // @ts-ignore: Deno global is available in Deno runtime
+    const GMAIL_EMAIL = Deno.env.get('GMAIL_EMAIL')
+    // @ts-ignore: Deno global is available in Deno runtime
+    const GMAIL_APP_PASSWORD = Deno.env.get('GMAIL_APP_PASSWORD')
 
     // Format email content
     const emailHtml = `
@@ -102,33 +97,74 @@ serve(async (req: Request) => {
       </html>
     `
 
-    // Send email using Supabase Auth Admin API
-    const { data, error } = await supabaseAdmin.auth.admin.sendEmail(
-      to,
-      {
+    // Send email based on configuration
+    if (USE_GMAIL && GMAIL_EMAIL && GMAIL_APP_PASSWORD) {
+      // Use Gmail SMTP (FREE, unlimited!)
+      const client = new SMTPClient({
+        connection: {
+          hostname: "smtp.gmail.com",
+          port: 465,
+          tls: true,
+          auth: {
+            username: GMAIL_EMAIL,
+            password: GMAIL_APP_PASSWORD,
+          },
+        },
+      })
+
+      await client.send({
+        from: `PharmStock <${GMAIL_EMAIL}>`,
+        to: to,
         subject: `🔔 Notifikasi Stok: ${reagentName}`,
         html: emailHtml,
-      }
-    )
+      })
 
-    if (error) {
-      console.error('Error sending email:', error)
+      await client.close()
+
       return new Response(
-        JSON.stringify({ error: error.message }),
+        JSON.stringify({ success: true, method: 'gmail' }),
         { 
-          status: 500,
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    } else {
+      // Use Resend API (100 emails/day free)
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: 'PharmStock <onboarding@resend.dev>',
+          to: [to],
+          subject: `🔔 Notifikasi Stok: ${reagentName}`,
+          html: emailHtml,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        console.error('Error sending email:', data)
+        return new Response(
+          JSON.stringify({ error: data.message || 'Failed to send email' }),
+          { 
+            status: res.status,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        )
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, method: 'resend', data }),
+        { 
+          status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
       )
     }
-
-    return new Response(
-      JSON.stringify({ success: true, data }),
-      { 
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    )
 
   } catch (error) {
     console.error('Function error:', error)

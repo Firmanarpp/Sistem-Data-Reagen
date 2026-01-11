@@ -160,9 +160,26 @@ npm run dev
 
 Buk📧 Setup Email Notifikasi
 
-Aplikasi ini dilengkapi dengan fitur email notifikasi otomatis menggunakan Supabase Edge Functions - **100% GRATIS tanpa pihak ketiga!**
+Aplikasi ini dilengkapi dengan fitur email notifikasi otomatis menggunakan **Resend** - **GRATIS 100 email/hari, no credit card!**
 
-### Install Supabase CLI
+### Quick Setup (5 Menit)
+
+#### 1. Daftar Resend (GRATIS)
+1. Buka https://resend.com/signup
+2. Sign up dengan GitHub/Google
+3. Verifikasi email
+
+#### 2. Dapatkan API Key
+1. Dashboard Resend → **API Keys**
+2. **Create API Key** → Full Access
+3. Copy API Key (format: `re_xxxx...`)
+
+#### 3. Set API Key di Supabase
+```bash
+supabase secrets set RESEND_API_KEY=re_your_api_key_here
+```
+
+#### 4. Install Supabase CLI
 
 #### Windows (Scoop)
 ```powershell
