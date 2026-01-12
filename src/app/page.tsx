@@ -7,7 +7,7 @@ import ReagentCard from '@/components/ReagentCard'
 import StatsCard from '@/components/StatsCard'
 import FilterBar from '@/components/FilterBar'
 import AddReagentModal from '@/components/AddReagentModal'
-import { getExpiryStatus, getStockLevel } from '@/lib/utils'
+import { getExpiryStatus, getStockLevel, isAdmin } from '@/lib/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -122,13 +122,15 @@ export default function DashboardPage() {
                 <History className="h-4 w-4" />
                 <span>Riwayat</span>
               </Link>
-              <button
-                onClick={() => setShowAddModal(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm font-medium shadow-sm"
-              >
-                <Plus className="h-4 w-4" />
-                <span>Tambah Reagen</span>
-              </button>
+              {isAdmin(userEmail) && (
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm font-medium shadow-sm"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Tambah Reagen</span>
+                </button>
+              )}
               <button
                 onClick={handleLogout}
                 className="text-red-600 hover:text-red-700 px-3 py-2 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-colors text-sm font-medium"
@@ -170,16 +172,18 @@ export default function DashboardPage() {
                   <History className="h-5 w-5" />
                   <span>Riwayat</span>
                 </Link>
-                <button
-                  onClick={() => {
-                    setShowAddModal(true)
-                    setMobileMenuOpen(false)
-                  }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2.5 rounded-lg flex items-center gap-3 transition-colors font-medium text-left"
-                >
-                  <Plus className="h-5 w-5" />
-                  <span>Tambah Reagen</span>
-                </button>
+                {isAdmin(userEmail) && (
+                  <button
+                    onClick={() => {
+                      setShowAddModal(true)
+                      setMobileMenuOpen(false)
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2.5 rounded-lg flex items-center gap-3 transition-colors font-medium text-left"
+                  >
+                    <Plus className="h-5 w-5" />
+                    <span>Tambah Reagen</span>
+                  </button>
+                )}
                 <button
                   onClick={handleLogout}
                   className="text-red-600 hover:text-red-700 px-3 py-2.5 rounded-lg hover:bg-red-50 flex items-center gap-3 transition-colors font-medium text-left"
@@ -253,7 +257,7 @@ export default function DashboardPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredReagents.map((reagent) => (
-              <ReagentCard key={reagent.id} reagent={reagent} onUpdate={loadReagents} />
+              <ReagentCard key={reagent.id} reagent={reagent} onUpdate={loadReagents} userEmail={userEmail} />
             ))}
           </div>
         )}

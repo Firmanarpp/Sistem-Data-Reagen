@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { supabase, type Reagent } from '@/lib/supabase'
-import { formatDate, getExpiryStatus, getStockLevel, cn } from '@/lib/utils'
+import { formatDate, getExpiryStatus, getStockLevel, cn, isAdmin } from '@/lib/utils'
 import { Package, Calendar, AlertCircle, TrendingUp, Edit, Trash2 } from 'lucide-react'
 import StockModal from './StockModal'
 import EditReagentModal from './EditReagentModal'
@@ -10,15 +10,24 @@ import EditReagentModal from './EditReagentModal'
 interface ReagentCardProps {
   reagent: Reagent
   onUpdate: () => void
+  userEmail: string
 }
 
-export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
+export default function ReagentCard({ reagent, onUpdate, userEmail }: ReagentCardProps) {
   const [showStockModal, setShowStockModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const isUserAdmin = isAdmin(userEmail)
 
   async function handleDelete() {
     if (!confirm(`Apakah Anda yakin ingin menghapus reagen "${reagent.name}"?`)) return
+    
+    // Check if user is admin
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!isAdmin(user?.email)) {
+      alert('Anda tidak memiliki izin untuk menghapus reagen.')
+      return
+    }
     
     setIsDeleting(true)
     try {
@@ -62,21 +71,25 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
             <h3 className="text-lg font-semibold text-gray-900">{reagent.name}</h3>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowEditModal(true)}
-              className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              title="Edit reagen"
-            >
-              <Edit className="h-4 w-4" />
-            </button>
-            <button
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
-              title="Hapus reagen"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+            {isUserAdmin && (
+              <>
+                <button
+                  onClick={() => setShowEditModal(true)}
+                  className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  title="Edit reagen"
+                >
+                  <Edit className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                  title="Hapus reagen"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </>
+            )}
             {expiryStatus !== 'none' && expiryStatus !== 'valid' && (
               <span className={cn(
                 'px-2 py-1 rounded-md text-xs font-medium border',
@@ -145,13 +158,15 @@ export default function ReagentCard({ reagent, onUpdate }: ReagentCardProps) {
           )}
         </div>
 
-        <button
-          onClick={() => setShowStockModal(true)}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-        >
-          <TrendingUp className="h-4 w-4" />
-          Kelola Stok
-        </button>
+        {isUserAdmin && (
+          <button
+            onClick={() => setShowStockModal(true)}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <TrendingUp className="h-4 w-4" />
+            Kelola Stok
+          </button>
+        )}
       </div>
 
       {showStockModal && (

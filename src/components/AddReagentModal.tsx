@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { isAdmin } from '@/lib/utils'
 import { X, Plus } from 'lucide-react'
 
 interface AddReagentModalProps {
@@ -27,6 +28,13 @@ export default function AddReagentModal({ onClose, onSuccess }: AddReagentModalP
     setLoading(true)
 
     try {
+      // Check if user is admin
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!isAdmin(user?.email)) {
+        alert('Anda tidak memiliki izin untuk menambahkan reagen.')
+        return
+      }
+
       const { error } = await supabase
         .from('reagents')
         .insert([{

@@ -28,3 +28,7 @@ export function getStockLevel(stock: number): 'low' | 'medium' | 'high' {
 export function cn(...classes: (string | boolean | undefined)[]): string {
   return classes.filter(Boolean).join(' ')
 }
+
+export function isAdmin(email: string | null | undefined): boolean {
+  return email === 'gmpsmg@gmail.com'
+}

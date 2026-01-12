@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { supabase, type Reagent } from '@/lib/supabase'
+import { isAdmin } from '@/lib/utils'
 import { X, Save } from 'lucide-react'
 
 interface EditReagentModalProps {
@@ -28,6 +29,13 @@ export default function EditReagentModal({ reagent, onClose, onSuccess }: EditRe
     setLoading(true)
 
     try {
+      // Check if user is admin
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!isAdmin(user?.email)) {
+        alert('Anda tidak memiliki izin untuk mengedit reagen.')
+        return
+      }
+
       const { error } = await supabase
         .from('reagents')
         .update({

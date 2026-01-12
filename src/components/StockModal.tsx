@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { supabase, type Reagent } from '@/lib/supabase'
+import { isAdmin, formatDate } from '@/lib/utils'
 import { X, ArrowUpCircle, ArrowDownCircle, Clock } from 'lucide-react'
-import { formatDate } from '@/lib/utils'
 
 interface StockModalProps {
   reagent: Reagent
@@ -50,6 +50,13 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
     try {
       // Get current user
       const { data: { user } } = await supabase.auth.getUser()
+      
+      // Check if user is admin
+      if (!isAdmin(user?.email)) {
+        alert('Anda tidak memiliki izin untuk mengelola stok.')
+        setLoading(false)
+        return
+      }
       
       const numAmount = parseFloat(amount)
       const oldStock = reagent.stock
