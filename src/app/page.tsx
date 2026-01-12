@@ -81,7 +81,7 @@ export default function DashboardPage() {
     }
 
     if (stockFilter) {
-      const level = getStockLevel(reagent.stock)
+      const level = getStockLevel(reagent.stock, reagent.initial_weight, reagent.unit)
       if (stockFilter !== level) return false
     }
 
@@ -91,7 +91,7 @@ export default function DashboardPage() {
   const totalReagents = reagents.length
   const expiredCount = reagents.filter(r => getExpiryStatus(r.expiry_date) === 'expired').length
   const expiringCount = reagents.filter(r => getExpiryStatus(r.expiry_date) === 'expiring').length
-  const lowStockCount = reagents.filter(r => getStockLevel(r.stock) === 'low').length
+  const lowStockCount = reagents.filter(r => getStockLevel(r.stock, r.initial_weight, r.unit) === 'low').length
 
   return (
     <div className="min-h-screen">

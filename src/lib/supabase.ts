@@ -20,6 +20,7 @@ export type Reagent = {
   stock_in: number
   stock_out: number
   stock: number
+  initial_weight: number | null
   unit: string
   created_at: string
   updated_at: string

@@ -50,7 +50,6 @@ export default function FilterBar({
       >
         <option value="">Semua Level Stok</option>
         <option value="low">Stok Rendah</option>
-        <option value="medium">Stok Sedang</option>
         <option value="high">Stok Tinggi</option>
       </select>
 

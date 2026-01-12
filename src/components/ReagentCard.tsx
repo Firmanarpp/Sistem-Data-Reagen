@@ -48,7 +48,7 @@ export default function ReagentCard({ reagent, onUpdate, userEmail }: ReagentCar
   }
   
   const expiryStatus = getExpiryStatus(reagent.expiry_date)
-  const stockLevel = getStockLevel(reagent.stock)
+  const stockLevel = getStockLevel(reagent.stock, reagent.initial_weight, reagent.unit)
 
   const expiryBadgeClass = {
     expired: 'bg-red-100 text-red-800 border-red-200',
@@ -59,7 +59,6 @@ export default function ReagentCard({ reagent, onUpdate, userEmail }: ReagentCar
 
   const stockBadgeClass = {
     low: 'text-red-600',
-    medium: 'text-yellow-600',
     high: 'text-green-600'
   }
 
@@ -133,6 +132,12 @@ export default function ReagentCard({ reagent, onUpdate, userEmail }: ReagentCar
               <Calendar className="h-4 w-4 mr-2" />
               <span className="font-medium">Tgl Kadaluarsa:</span>
               <span className="ml-1">{formatDate(reagent.expiry_date)}</span>
+            </div>
+          )}
+          {reagent.initial_weight && (
+            <div className="flex items-center text-sm text-gray-600">
+              <span className="font-medium">Berat Sediaan:</span>
+              <span className="ml-1">{reagent.initial_weight} {reagent.unit}</span>
             </div>
           )}
         </div>
