@@ -30,5 +30,6 @@ export function cn(...classes: (string | boolean | undefined)[]): string {
 }
 
 export function isAdmin(email: string | null | undefined): boolean {
-  return email === 'gmpsmg@gmail.com'
+  const adminEmails = ['gmpsmg@gmail.com', 'projectfarmasi26@gmail.com']
+  return adminEmails.includes(email || '')
 }
