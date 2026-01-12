@@ -48,7 +48,7 @@ export default function ReagentCard({ reagent, onUpdate, userEmail }: ReagentCar
   }
   
   const expiryStatus = getExpiryStatus(reagent.expiry_date)
-  const stockLevel = getStockLevel(reagent.stock, reagent.initial_weight, reagent.unit)
+  const stockLevel = getStockLevel(reagent.stock, reagent.initial_weight, reagent.unit, reagent.type)
 
   const expiryBadgeClass = {
     expired: 'bg-red-100 text-red-800 border-red-200',

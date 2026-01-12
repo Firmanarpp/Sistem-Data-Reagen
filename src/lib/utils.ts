@@ -19,46 +19,49 @@ export function getExpiryStatus(expiryDate: string | null): 'expired' | 'expirin
   return 'valid'
 }
 
-export function getStockLevel(stock: number, initialWeight?: number | null, unit?: string): 'low' | 'high' {
+export function getStockLevel(stock: number, initialWeight?: number | null, unit?: string, type?: string | null): 'low' | 'high' {
   // Jika tidak ada berat sediaan, gunakan logika lama
   if (!initialWeight) {
     if (stock < 50) return 'low'
     return 'high'
   }
 
-  // Konversi ke gram jika perlu untuk standardisasi
-  let weightInGrams = initialWeight
+  // Normalisasi nilai berdasarkan satuan
+  let normalizedWeight = initialWeight
+  
+  // Untuk Padat (g/kg), konversi ke gram
   if (unit === 'kg') {
-    weightInGrams = initialWeight * 1000
-  } else if (unit === 'L') {
-    weightInGrams = initialWeight * 1000 // Asumsi densitas ~1 g/ml
-  } else if (unit === 'ml') {
-    weightInGrams = initialWeight // Asumsi densitas ~1 g/ml
+    normalizedWeight = initialWeight * 1000
   }
+  // Untuk Cair (ml/L), konversi ke ml
+  else if (unit === 'L') {
+    normalizedWeight = initialWeight * 1000
+  }
+  // g dan ml tidak perlu konversi, sudah dalam satuan dasar
 
   // Tentukan stok minimum berdasarkan 7 kelompok
   let minStock = 2
 
-  if (weightInGrams <= 10) {
-    // Kelompok 1: ≤ 10 g → Stok Minimum 2 g
+  if (normalizedWeight <= 10) {
+    // Kelompok 1: ≤ 10 (g atau ml) → Stok Minimum 2
     minStock = 2
-  } else if (weightInGrams <= 25) {
-    // Kelompok 2: 25 g → Stok Minimum 5 g
+  } else if (normalizedWeight <= 25) {
+    // Kelompok 2: 25 (g atau ml) → Stok Minimum 5
     minStock = 5
-  } else if (weightInGrams <= 50) {
-    // Kelompok 3: 50 g → Stok Minimum 8 g
+  } else if (normalizedWeight <= 50) {
+    // Kelompok 3: 50 (g atau ml) → Stok Minimum 8
     minStock = 8
-  } else if (weightInGrams <= 100) {
-    // Kelompok 4: 100 g → Stok Minimum 20 g
+  } else if (normalizedWeight <= 100) {
+    // Kelompok 4: 100 (g atau ml) → Stok Minimum 20
     minStock = 20
-  } else if (weightInGrams <= 250) {
-    // Kelompok 5: 250 g → Stok Minimum 40 g
+  } else if (normalizedWeight <= 250) {
+    // Kelompok 5: 250 (g atau ml) → Stok Minimum 40
     minStock = 40
-  } else if (weightInGrams <= 500) {
-    // Kelompok 6: 500 g → Stok Minimum 75 g
+  } else if (normalizedWeight <= 500) {
+    // Kelompok 6: 500 (g atau ml) → Stok Minimum 75
     minStock = 75
   } else {
-    // Kelompok 7: 1000 g → Stok Minimum 150 g
+    // Kelompok 7: 1000 (g atau ml) → Stok Minimum 150
     minStock = 150
   }
 
