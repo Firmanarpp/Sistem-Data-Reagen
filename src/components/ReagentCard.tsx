@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { supabase, type Reagent } from '@/lib/supabase'
 import { formatDate, getExpiryStatus, getStockLevel, cn, isAdmin } from '@/lib/utils'
-import { Package, Calendar, AlertCircle, TrendingUp, Edit, Trash2 } from 'lucide-react'
+import { Package, Calendar, AlertCircle, TrendingUp, Edit, Trash2, Tag, Hash, Weight } from 'lucide-react'
 import StockModal from './StockModal'
 import EditReagentModal from './EditReagentModal'
 
@@ -110,12 +110,14 @@ export default function ReagentCard({ reagent, onUpdate, userEmail }: ReagentCar
           )}
           {reagent.brand && (
             <div className="flex items-center text-sm text-gray-600">
+              <Tag className="h-4 w-4 mr-2" />
               <span className="font-medium">Merek:</span>
               <span className="ml-1">{reagent.brand}</span>
             </div>
           )}
           {reagent.batch_number && (
             <div className="flex items-center text-sm text-gray-600">
+              <Hash className="h-4 w-4 mr-2" />
               <span className="font-medium">No. Batch:</span>
               <span className="ml-1">{reagent.batch_number}</span>
             </div>
@@ -136,6 +138,7 @@ export default function ReagentCard({ reagent, onUpdate, userEmail }: ReagentCar
           )}
           {reagent.initial_weight && (
             <div className="flex items-center text-sm text-gray-600">
+              <Weight className="h-4 w-4 mr-2" />
               <span className="font-medium">Berat Sediaan:</span>
               <span className="ml-1">{reagent.initial_weight} {reagent.unit}</span>
             </div>
