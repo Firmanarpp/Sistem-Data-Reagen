@@ -17,6 +17,8 @@ type TransactionWithReagent = {
   created_at: string
   reagent_name: string
   reagent_unit: string
+  reagent_brand: string | null
+  reagent_batch_number: string | null
 }
 
 export default function TransactionHistoryPage() {
@@ -24,6 +26,9 @@ export default function TransactionHistoryPage() {
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [searchName, setSearchName] = useState('')
+  const [searchBatch, setSearchBatch] = useState('')
+  const [searchBrand, setSearchBrand] = useState('')
 
   useEffect(() => {
     loadTransactions()
@@ -45,7 +50,7 @@ export default function TransactionHistoryPage() {
       const reagentIds = [...new Set(transactionsData?.map(t => t.reagent_id) || [])]
       const { data: reagentsData, error: reagentsError } = await supabase
         .from('reagents')
-        .select('id, name, unit')
+        .select('id, name, unit, brand, batch_number')
         .in('id', reagentIds)
 
       if (reagentsError) throw reagentsError
@@ -55,7 +60,9 @@ export default function TransactionHistoryPage() {
       const combined = transactionsData?.map(t => ({
         ...t,
         reagent_name: reagentMap.get(t.reagent_id)?.name || 'Unknown',
-        reagent_unit: reagentMap.get(t.reagent_id)?.unit || ''
+        reagent_unit: reagentMap.get(t.reagent_id)?.unit || '',
+        reagent_brand: reagentMap.get(t.reagent_id)?.brand || null,
+        reagent_batch_number: reagentMap.get(t.reagent_id)?.batch_number || null
       })) || []
 
       setTransactions(combined)
@@ -79,6 +86,21 @@ export default function TransactionHistoryPage() {
       const end = new Date(endDate)
       end.setHours(23, 59, 59, 999)
       if (transactionDate > end) return false
+    }
+    
+    // Filter by name
+    if (searchName && !t.reagent_name.toLowerCase().includes(searchName.toLowerCase())) {
+      return false
+    }
+    
+    // Filter by batch number
+    if (searchBatch && !t.reagent_batch_number?.toLowerCase().includes(searchBatch.toLowerCase())) {
+      return false
+    }
+    
+    // Filter by brand
+    if (searchBrand && !t.reagent_brand?.toLowerCase().includes(searchBrand.toLowerCase())) {
+      return false
     }
     
     return true
@@ -116,43 +138,86 @@ export default function TransactionHistoryPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Riwayat</h2>
+          
+          <div className="space-y-4">
+            {/* Date filters */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tanggal Akhir</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
             </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Tanggal Akhir</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+            
+            {/* Search filters */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Nama Reagen</label>
+                <input
+                  type="text"
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                  placeholder="Cari nama..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">No. Batch</label>
+                <input
+                  type="text"
+                  value={searchBatch}
+                  onChange={(e) => setSearchBatch(e.target.value)}
+                  placeholder="Cari no. batch..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Merk</label>
+                <input
+                  type="text"
+                  value={searchBrand}
+                  onChange={(e) => setSearchBrand(e.target.value)}
+                  placeholder="Cari merk..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
             </div>
-            <div className="flex items-end">
+            
+            <div className="flex items-center justify-between pt-2">
               <button
                 onClick={() => {
                   setStartDate('')
                   setEndDate('')
+                  setSearchName('')
+                  setSearchBatch('')
+                  setSearchBrand('')
                 }}
                 className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                Reset
+                Reset Semua Filter
               </button>
+              
+              {filteredTransactions.length !== transactions.length && (
+                <div className="text-sm text-gray-600">
+                  Menampilkan <span className="font-semibold">{filteredTransactions.length}</span> dari <span className="font-semibold">{transactions.length}</span> transaksi
+                </div>
+              )}
             </div>
           </div>
-          
-          {filteredTransactions.length !== transactions.length && (
-            <div className="mt-4 text-sm text-gray-600">
-              Menampilkan <span className="font-semibold">{filteredTransactions.length}</span> dari <span className="font-semibold">{transactions.length}</span> transaksi
-            </div>
-          )}
         </div>
 
         {loading ? (
