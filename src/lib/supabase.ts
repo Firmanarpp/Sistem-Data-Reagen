@@ -28,7 +28,9 @@ export type Reagent = {
 
 export type Transaction = {
   id: string
-  reagent_id: string
+  reagent_id: string | null
+  reagent_name: string
+  reagent_unit: string
   type: 'in' | 'out'
   amount: number
   old_stock: number

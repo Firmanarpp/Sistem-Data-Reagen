@@ -1,73 +1,379 @@
-# 📦 PharmStock - Sistem Manajemen Inventori Reagen Farmasi
+<div align="center">
 
-Sistem manajemen inventori reagen farmasi yang profesional dan modern, dibangun dengan Next.js 14, TypeScript, Tailwind CSS, dan Supabase. Dirancang khusus untuk kontrol stok pabrik di industri farmasi.
+# 📦 PharmStock
+
+### Sistem Manajemen Inventori Reagen Laboratorium
+
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.3-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Latest-3ECF8E?style=for-the-badge&logo=supabase)](https://supabase.com/)
+
+**Aplikasi web modern untuk mengelola inventori reagen laboratorium dengan sistem tracking stok real-time, notifikasi kadaluarsa otomatis, dan riwayat transaksi lengkap.**
+
+[Demo](#demo) • [Fitur](#-fitur-utama) • [Instalasi](#-instalasi--setup) • [Dokumentasi](#-dokumentasi-teknis) • [Kontribusi](#-kontribusi)
+
+---
+
+</div>
+
+## 📋 Daftar Isi
+
+- [Tentang Project](#-tentang-project)
+- [Fitur Utama](#-fitur-utama)
+- [Tech Stack](#-tech-stack)
+- [Arsitektur Sistem](#-arsitektur-sistem)
+- [Instalasi & Setup](#-instalasi--setup)
+- [Struktur Project](#-struktur-project)
+- [Dokumentasi Teknis](#-dokumentasi-teknis)
+- [Keamanan](#-keamanan)
+- [Deployment](#-deployment)
+- [Roadmap](#-roadmap)
+
+---
+
+## 🎯 Tentang Project
+
+**PharmStock** adalah sistem manajemen inventori reagen laboratorium yang dirancang khusus untuk membantu laboratorium farmasi dalam mengelola stok reagen secara efisien. Aplikasi ini menyediakan solusi lengkap untuk:
+
+- 📊 **Monitoring Stok Real-time** - Pantau ketersediaan reagen kapan saja
+- ⏰ **Peringatan Kadaluarsa** - Notifikasi otomatis untuk reagen yang akan/sudah kadaluarsa
+- 📉 **Analisis Pemakaian** - Tracking penggunaan reagen untuk perencanaan pembelian
+- 📧 **Notifikasi Email** - Pemberitahuan otomatis setiap transaksi stok
+- 📱 **Responsive Design** - Akses dari desktop, tablet, maupun mobile
+
+### Mengapa PharmStock?
+
+| Masalah | Solusi PharmStock |
+|---------|-------------------|
+| Stok reagen sering kehabisan tanpa peringatan | Sistem peringatan stok minimum otomatis berdasarkan kategori berat sediaan |
+| Reagen kadaluarsa terpakai | Notifikasi visual 3 bulan sebelum kadaluarsa |
+| Sulit melacak riwayat penggunaan | Riwayat transaksi lengkap yang persisten |
+| Data hilang saat reagen dihapus | Arsitektur soft-delete dengan preservasi history |
+| Akses tidak terkontrol | Role-based access control (Admin/User) |
+
+---
 
 ## ✨ Fitur Utama
 
-### 📊 Dashboard & Monitoring
-- **Real-time Dashboard** - Monitor total reagen, stok menipis, kadaluarsa, dan akan kadaluarsa
-- **Statistik Lengkap** - Overview stok dengan visual card yang informatif
-- **Status Alerts** - Peringatan visual untuk reagen kadaluarsa dan hampir habis
+### 1. 🏠 Dashboard Interaktif
 
-### 🔍 Pencarian & Filter
-- **Pencarian Cerdas** - Cari berdasarkan nama, merek, atau nomor batch
-- **Filter Lanjutan** - Filter berdasarkan tipe, status kadaluarsa, dan level stok
-- **Pengurutan Otomatis** - Diurutkan berdasarkan tren pemakaian (stock_out)
+<details>
+<summary><strong>Lihat Detail Fitur</strong></summary>
 
-### 📦 Manajemen Stok
-- **Stok Masuk/Keluar** - Transaksi stok yang mudah dan cepat
-- **Riwayat Transaksi** - Tracking lengkap semua perubahan stok
-- **Update Real-time** - Perubahan langsung tersimpan ke database
+Dashboard utama menampilkan overview lengkap kondisi inventori:
 
-### 📧 Notifikasi Email
-- **Email Otomatis** - Notifikasi saat ada perubahan stok
-- **100% Gratis** - Menggunakan Supabase Auth (tanpa pihak ketiga)
-- **Format Profesional** - Email HTML dengan styling modern
-- **Tanpa Batasan** - Kirim email tanpa rate limit
+**Statistik Cards:**
+- 📦 **Total Reagen** - Jumlah seluruh reagen dalam sistem
+- ⚠️ **Kadaluarsa** - Reagen yang sudah melewati tanggal kadaluarsa (badge merah)
+- ⏰ **Akan Kadaluarsa** - Reagen yang kadaluarsa dalam 3 bulan (badge kuning)
+- 📉 **Stok Rendah** - Reagen dengan stok di bawah minimum
 
-### 🎨 User Interface
-- **Desain Modern** - Interface yang clean dan intuitif
-- **Responsive** - Berfungsi sempurna di desktop, tablet, dan mobile
-- **Bahasa Indonesia** - Seluruh antarmuka dalam Bahasa Indonesia
-- **Dark Mode Ready** - Siap untuk implementasi dark mode
-
-### 🔐 Keamanan & Auth
-- **Supabase Authentication** - Login dengan email/password
-- **Protected Routes** - Halaman utama hanya bisa diakses setelah login
-- **User Management** - Sistem user terintegrasi dengan Supabase Auth
-
-## 🛠️ Tech Stack
-
-### Frontend
-- **Framework**: Next.js 14 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: Custom components dengan Lucide React icons
-- **State Management**: React Hooks
-
-### Backend
-- **Database**: Supabase (PostgreSQL)
-- **Prasyarat
-- Node.js 18+ dan npm
-- Akun Supabase (gratis)
-- Git (untuk deployment)
-
-### 1. Clone & Install
-```bash
-git clone <repository-url>
-cd daftar-reagen
-npm install
+**Fitur Pencarian & Filter:**
+```
+🔍 Pencarian     → Nama reagen, brand, batch number
+📋 Filter Tipe   → Cair | Padat | Reagen Suhu 2-8°C
+📅 Filter Status → Kadaluarsa | Akan Kadaluarsa | Valid
+📊 Filter Stok   → Rendah | Cukup
+🔄 Sortir        → Berdasarkan nama atau pemakaian tertinggi
 ```
 
-### 2. Setup Supabase
+**Export Data:**
+- 📥 Export seluruh data ke format Excel (.xlsx)
+- Filter yang diterapkan ikut ter-export
 
-#### A. Buat Project Supabase
-1. Buat akun di [supabase.com](https://supabase.com)
-2. Buat project baru
-3. Tunggu hingga project siap
+</details>
 
-#### B. Setup Database
-Jalankan SQL berikut di Supabase SQL Editor:
+### 2. 📦 Manajemen Stok
+
+<details>
+<summary><strong>Lihat Detail Fitur</strong></summary>
+
+**Transaksi Stok Masuk (Stock In):**
+- Catat penambahan stok baru
+- Input jumlah dan catatan/notes
+- Otomatis update akumulasi `stock_in`
+
+**Transaksi Stok Keluar (Stock Out):**
+- Catat penggunaan/pengambilan stok
+- Validasi otomatis: tidak bisa melebihi stok tersedia
+- Otomatis update akumulasi `stock_out`
+
+**Notifikasi Email Otomatis:**
+```
+📧 Email dikirim setelah setiap transaksi berisi:
+   • Nama reagen
+   • Jenis transaksi (Masuk/Keluar)
+   • Jumlah perubahan
+   • Stok sebelum & sesudah
+   • Catatan transaksi
+```
+
+**Tracking Pemakaian:**
+- Setiap reagen mencatat total `stock_in` dan `stock_out`
+- Sortir dashboard berdasarkan pemakaian tertinggi
+- Analisis tren untuk perencanaan pembelian
+
+</details>
+
+### 3. 🚨 Sistem Peringatan Otomatis
+
+<details>
+<summary><strong>Lihat Detail Fitur</strong></summary>
+
+**Deteksi Status Kadaluarsa:**
+
+| Status | Kondisi | Tampilan Visual |
+|--------|---------|-----------------|
+| 🔴 **Kadaluarsa** | Tanggal sudah terlewati | Badge merah "⚠️ Kadaluarsa" |
+| 🟡 **Akan Kadaluarsa** | Dalam 90 hari (3 bulan) | Badge kuning "⏰ Akan Kadaluarsa" |
+| 🟢 **Valid** | Lebih dari 90 hari | Tanpa badge |
+| ⚪ **Tidak Ada** | Tanggal tidak diisi | Tanpa badge |
+
+**Algoritma Level Stok Dinamis:**
+
+Sistem menggunakan **berat sediaan (initial_weight)** untuk menentukan stok minimum yang berbeda-beda:
+
+```javascript
+// Konversi ke satuan dasar (gram/ml)
+if (unit === 'kg') normalizedWeight = initialWeight * 1000
+if (unit === 'L')  normalizedWeight = initialWeight * 1000
+
+// Tentukan minimum stok berdasarkan 7 kelompok
+```
+
+| Berat Sediaan | Stok Minimum | Contoh Kasus |
+|---------------|--------------|--------------|
+| ≤ 10 g/ml | 2 | Reagen mahal/jarang dipakai |
+| ≤ 25 g/ml | 5 | Reagen kemasan kecil |
+| ≤ 50 g/ml | 8 | Reagen standar |
+| ≤ 100 g/ml | 20 | Reagen kemasan medium |
+| ≤ 250 g/ml | 40 | Reagen sering dipakai |
+| ≤ 500 g/ml | 75 | Reagen kemasan besar |
+| > 500 g/ml | 150 | Reagen bulk/industri |
+
+</details>
+
+### 4. 📜 Riwayat Transaksi
+
+<details>
+<summary><strong>Lihat Detail Fitur</strong></summary>
+
+**Halaman History** (`/history`) mencatat seluruh aktivitas transaksi:
+
+**Filter Tersedia:**
+- 📅 **Range Tanggal** - Pilih periode mulai dan akhir
+- 🔍 **Nama Reagen** - Cari berdasarkan nama
+- 🏷️ **Batch Number** - Cari berdasarkan nomor batch
+- 🏢 **Brand** - Cari berdasarkan merek
+
+**Informasi Per Transaksi:**
+```
+┌─────────────────────────────────────────────────────┐
+│ 🧪 [Nama Reagen]              📅 14 Jan 2026 10:30 │
+│ ────────────────────────────────────────────────── │
+│ ⬆️ Stok Masuk: +50 ml                              │
+│ 📊 Perubahan: 100 → 150 ml                         │
+│ 📝 Catatan: Pengadaan bulanan                      │
+└─────────────────────────────────────────────────────┘
+```
+
+**Visualisasi Data:**
+- 📈 Grafik tren stok harian menggunakan **Recharts**
+- Export hasil filter ke Excel
+
+**Preservasi Data (Soft Delete):**
+```
+Ketika reagen dihapus:
+✓ reagent_id menjadi NULL
+✓ reagent_name & reagent_unit tetap tersimpan
+✓ History page menampilkan "(dihapus)" sebagai penanda
+✓ Data historis TIDAK hilang
+```
+
+</details>
+
+### 5. 🔐 Autentikasi & Otorisasi
+
+<details>
+<summary><strong>Lihat Detail Fitur</strong></summary>
+
+**Sistem Login Fleksibel:**
+- ✉️ Login dengan **Email + Password**
+- 👤 Login dengan **Username + Password**
+
+**Registrasi Akun:**
+- Input: Email, Username (unique), Password, Nama Lengkap
+- Validasi: Password min. 6 karakter, Username min. 3 karakter
+- Otomatis buat profile di tabel `profiles`
+
+**Role-Based Access Control:**
+
+| Fitur | Admin | User Biasa |
+|-------|:-----:|:----------:|
+| View Dashboard | ✅ | ✅ |
+| View History | ✅ | ✅ |
+| Export Excel | ✅ | ✅ |
+| Tambah Reagen | ✅ | ❌ |
+| Edit Reagen | ✅ | ❌ |
+| Hapus Reagen | ✅ | ❌ |
+| Transaksi Stok | ✅ | ❌ |
+
+**Daftar Admin:**
+```javascript
+const adminEmails = ['gmpsmg@gmail.com', 'projectfarmasi26@gmail.com']
+```
+
+**Protected Routes:**
+- `AuthGuard` component membungkus seluruh aplikasi
+- Otomatis redirect ke `/login` jika tidak terautentikasi
+- Otomatis redirect ke `/` jika sudah login mengakses `/login`
+
+</details>
+
+### 6. ✏️ CRUD Reagen (Admin Only)
+
+<details>
+<summary><strong>Lihat Detail Fitur</strong></summary>
+
+**Tambah Reagen Baru:**
+```
+Form Input:
+├── Nama Reagen*         (wajib)
+├── Jenis                 [Cair | Padat | Reagen Suhu 2-8°C]
+├── Brand/Merek          (opsional)
+├── Nomor Batch          (opsional)
+├── Stok Awal*           (wajib)
+├── Berat Sediaan        (untuk perhitungan minimum stok)
+├── Satuan               [ml | L | g | kg]
+├── Tanggal Kadaluarsa   (opsional)
+└── Tanggal Kedatangan   (opsional)
+```
+
+**Edit Reagen:**
+- Update semua field reagen
+- Modal dengan pre-filled data existing
+
+**Hapus Reagen:**
+- Konfirmasi dialog sebelum hapus
+- Soft delete: history tetap preserved
+- Hanya admin yang bisa menghapus
+
+</details>
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+| Teknologi | Versi | Kegunaan |
+|-----------|-------|----------|
+| ![Next.js](https://img.shields.io/badge/Next.js-black?style=flat-square&logo=next.js) | 16.1.1 | React framework dengan App Router, SSR/SSG |
+| ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black) | 19.2.3 | Library UI dengan hooks modern |
+| ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) | 5.x | Type safety dan developer experience |
+| ![Tailwind](https://img.shields.io/badge/Tailwind-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white) | 4.x | Utility-first CSS framework |
+| ![Lucide](https://img.shields.io/badge/Lucide-F56565?style=flat-square) | 0.562.0 | Modern icon library |
+
+### Backend & Database
+
+| Teknologi | Kegunaan |
+|-----------|----------|
+| ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white) | Backend-as-a-Service |
+| PostgreSQL | Relational database |
+| Row Level Security | Data-level security |
+| Edge Functions | Serverless functions (Deno) |
+| Supabase Auth | Authentication system |
+
+### Libraries Pendukung
+
+| Library | Versi | Kegunaan |
+|---------|-------|----------|
+| `date-fns` | 4.1.0 | Formatting dan manipulasi tanggal |
+| `xlsx` | 0.18.5 | Export data ke Excel |
+| `recharts` | 3.6.0 | Visualisasi grafik interaktif |
+
+---
+
+## 🏗 Arsitektur Sistem
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         CLIENT LAYER                            │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │                    Next.js 16 (App Router)                │  │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────┐ │  │
+│  │  │   /login    │ │  /register  │ │     / (Dashboard)   │ │  │
+│  │  └─────────────┘ └─────────────┘ └─────────────────────┘ │  │
+│  │  ┌─────────────────────────────────────────────────────┐ │  │
+│  │  │                    /history                          │ │  │
+│  │  └─────────────────────────────────────────────────────┘ │  │
+│  │                                                           │  │
+│  │  Components: ReagentCard | StockModal | AddReagentModal  │  │
+│  │              EditReagentModal | FilterBar | StatsCard    │  │
+│  │              AuthGuard                                    │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└────────────────────────────┬────────────────────────────────────┘
+                             │ HTTPS
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       SUPABASE LAYER                            │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │                    Supabase Client                        │  │
+│  │  • Authentication (Email/Password, Username lookup)       │  │
+│  │  • Database Queries (CRUD operations)                     │  │
+│  │  • Real-time Subscriptions (future)                       │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  ┌───────────────┐ ┌───────────────┐ ┌────────────────────┐    │
+│  │   reagents    │ │  transactions │ │     profiles       │    │
+│  │   (table)     │ │    (table)    │ │     (table)        │    │
+│  └───────┬───────┘ └───────┬───────┘ └────────────────────┘    │
+│          │                 │                                    │
+│          └────────┬────────┘                                    │
+│                   │ ON DELETE SET NULL                          │
+│                   ▼                                             │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │              Edge Function: send-stock-notification       │  │
+│  │              (Deno Runtime - Email via Gmail SMTP/Resend) │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🚀 Instalasi & Setup
+
+### Prerequisites
+
+- **Node.js** 18.x atau lebih baru
+- **npm** atau **yarn**
+- Akun **Supabase** (gratis di [supabase.com](https://supabase.com))
+
+### Langkah 1: Clone Repository
+
+```bash
+git clone https://github.com/your-username/daftar-reagen.git
+cd daftar-reagen
+```
+
+### Langkah 2: Install Dependencies
+
+```bash
+npm install
+# atau
+yarn install
+```
+
+### Langkah 3: Setup Supabase
+
+1. **Buat Project Baru** di [Supabase Dashboard](https://app.supabase.com)
+
+2. **Buat Tabel Database** dengan SQL berikut:
+
+<details>
+<summary><strong>📋 SQL: Create Tables</strong></summary>
 
 ```sql
 -- Tabel Reagents
@@ -79,44 +385,22 @@ CREATE TABLE reagents (
   arrival_date DATE,
   expiry_date DATE,
   brand TEXT,
-  stock_in NUMERIC DEFAULT 0,
-  stock_out NUMERIC DEFAULT 0,
-  stock NUMERIC DEFAULT 0,
-  unit TEXT NOT NULL,
+  stock NUMERIC NOT NULL DEFAULT 0,
+  stock_in NUMERIC NOT NULL DEFAULT 0,
+  stock_out NUMERIC NOT NULL DEFAULT 0,
+  initial_weight NUMERIC,
+  unit TEXT NOT NULL DEFAULT 'ml',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-### Tabel: `reagents`
-| Field | Type | Deskripsi |
-|-------|------|-----------|
-| id | UUID | Primary key |
-| name | TEXT | Nama reagen |
-| type | TEXT | Tipe: 'Cair', 'Padat', 'Reagen Suhu 2-8°C' |
-| batch_number | TEXT | Nomor batch |
-| arrival_date | DATE | Tanggal kedatangan |
-| expiry_date | DATE | Tanggal kadaluarsa |
-| brand | TEXT | Merek reagen |
-| stock_in | NUMERIC | Total stok masuk |
-| stock_out | NUMERIC | Total stok keluar |
-| stock | NUMERIC | Stok saat ini |
-| unit | TEXT | Satuan (ml, g, L, dll) |
-| created_at | TIMESTAMPTZ | Waktu dibuat |
-| updated_at | TIMESTAMPTZ | Waktu update terakhir |
 
-### Tabel: `transactions`
-| Field | Type | Deskripsi |
-|-------|------|-----------|
-| id | UUID | Primary key |
-| reagent_id | UUID | Foreign key ke reagents |
-| type | TEXT | 'in' atau 'out' |
-| amount | NUMERIC | Jumlah transaksi |
-| old_stock | NUMERIC | Stok sebelum transaksi |
-| new_stock | NUMERIC | Stok setelah transaksi |
-| notes | TEXT | Catatan (optional) |
-| created_at | TIMESTAMPTZ | Waktu transaksi |
+-- Tabel Transactions
+CREATE TABLE transactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  reagent_id UUID REFERENCES reagents(id) ON DELETE CASCADE,
-  type TEXT CHECK (type IN ('in', 'out')),
+  reagent_id UUID REFERENCES reagents(id) ON DELETE SET NULL,
+  reagent_name TEXT NOT NULL,
+  reagent_unit TEXT NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('in', 'out')),
   amount NUMERIC NOT NULL,
   old_stock NUMERIC NOT NULL,
   new_stock NUMERIC NOT NULL,
@@ -124,172 +408,70 @@ CREATE TABLE reagents (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Enable RLS (Row Level Security)
-ALTER TABLE reagents ENABLE ROW LEVEL SECURITY;
-ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+-- Tabel Profiles
+CREATE TABLE profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  username TEXT UNIQUE NOT NULL,
+  full_name TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
 
--- Policies untuk authenticated users
-CREATE POLICY "Allow authenticated users" ON reagents FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Allow authenticated users" ON transactions FOR ALL USING (auth.role() = 'authenticated');
+-- Index untuk performa
+CREATE INDEX idx_transactions_reagent_id ON transactions(reagent_id);
+CREATE INDEX idx_transactions_created_at ON transactions(created_at);
+CREATE INDEX idx_reagents_expiry_date ON reagents(expiry_date);
 ```
 
-#### C. Enable Authentication
-1. Buka Authentication → Providers di Supabase Dashboard
-2. Enable Email Provider
-3. Disable email confirmation untuk development (optional)
+</details>
 
-### 3. Configure Environment Variables
+3. **Jalankan Migration** untuk history preservation (opsional jika database baru):
+
+```sql
+-- Jalankan isi file: migration-keep-history.sql
+```
+
+### Langkah 4: Setup Environment Variables
 
 Buat file `.env.local` di root project:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
-**Cara mendapatkan credentials:**
-1. Buka Supabase Dashboard
-2. Ke Settings → API
-3. Copy `Project URL` dan `anon/public key`
+> 💡 Dapatkan values dari **Supabase Dashboard** → **Settings** → **API**
 
-### 4. Run Development Server
+### Langkah 5: Setup Edge Function (Optional)
+
+Untuk mengaktifkan notifikasi email:
+
+```bash
+# Install Supabase CLI
+npm install -g supabase
+
+# Login ke Supabase
+supabase login
+
+# Link ke project
+supabase link --project-ref your-project-ref
+
+# Deploy function
+supabase functions deploy send-stock-notification
+
+# Set secrets untuk email
+supabase secrets set USE_GMAIL=true
+supabase secrets set GMAIL_EMAIL=your-email@gmail.com
+supabase secrets set GMAIL_APP_PASSWORD=your-app-password
+```
+
+### Langkah 6: Jalankan Development Server
 
 ```bash
 npm run dev
 ```
 
-Buk📧 Setup Email Notifikasi
-
-Aplikasi ini dilengkapi dengan fitur email notifikasi otomatis menggunakan **Resend** - **GRATIS 100 email/hari, no credit card!**
-
-### Quick Setup (5 Menit)
-
-#### 1. Daftar Resend (GRATIS)
-1. Buka https://resend.com/signup
-2. Sign up dengan GitHub/Google
-3. Verifikasi email
-
-#### 2. Dapatkan API Key
-1. Dashboard Resend → **API Keys**
-2. **Create API Key** → Full Access
-3. Copy API Key (format: `re_xxxx...`)
-
-#### 3. Set API Key di Supabase
-```bash
-supabase secrets set RESEND_API_KEY=re_your_api_key_here
-```
-
-#### 4. Install Supabase CLI
-
-#### Windows (Scoop)
-```powershell
-# Install Scoop (jika belum)
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
-
-# Install Supabase CLI
-scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
-scoop install supabase
-```
-
-#### macOS/Linux
-```bash
-brew install supabase/tap/supabase
-```
-
-### Deploy Edge Function
-
-```bash
-# 1. Login ke Supabase
-supabase login
-
-# 2. Link project (ganti dengan project ref Anda)
-supabase link --project-ref your-project-ref
-
-# 3. Deploy email notification function
-supabaCara Penggunaan
-
-### Login & Register
-1. **Register** - Buka `/register` untuk membuat akun baru
-2. **Login** - Gunakan email dan password untuk masuk
-3. **Protected Routes** - Semua halaman utama hanya bisa diakses setelah login
-
-### Dashboard
-- **Overview Cards** - Lihat statistik: Total Reagen, Stok Menipis, Kadaluarsa, Akan Kadaluarsa
-- **Quick Actions** - Tombol cepat untuk tambah reagen dan lihat riwayat
-- **Visual Alerts** - Kartu berwarna merah untuk expired/low stock, kuning untuk expiring soon
-
-### Manajemen Reagen
-
-#### Tambah Reagen Baru
-1. Click tombol **"+ Tambah Reagen"**
-2. Isi form:
-   - Nama reagen (wajib)
-   - Tipe: Cair / Padat / Reagen Suhu 2-8°C
-   - Nomor Batch
-   - Tanggal kedatangan
-   - Tanggal kadaluarsa
-   - Merek
-   - Stok awal (wajib)
-   - Satuan (wajib)
-3. Click **"Simpan"**
-
-#### Edit Reagen
-1. Click tombol **Edit** (ikon pensil) pada kartu reagen
-2. Update data yang diperlukan
-3. Click **"Simpan Perubahan"**
-
-#### Hapus Reagen
-1. Click tombol **Hapus** (ikon tempat sampah) pada kartu reagen
-2. Konfirmasi penghapusan
-3. Reagen dan semua transaksi terkait akan dihapus
-
-#### Kelola Stok
-1. Click tombol **"Kelola Stok"** pada kartu reagen
-2. Pilih jenis transaksi:
-   - **Stok Masuk** - Untuk penambahan stok
-   - **Stok Keluar** - Untuk pengurangan stok (pemakaian)
-3. Masukkan jumlah
-4. Tambahkan catatan (optional)
-5. Click **"Simpan"**
-6. Email notifikasi otomatis terkirim
-
-### Pencarian & Filter
-
-#### Pencarian
-- Ketik di search box untuk mencari berdasarkan:
-  - Nama reagen
-  - Merek
-  - Nomor batch
-
-#### Filter
-- **Filter Tipe** - Cair, Padat, Reagen Suhu 2-8°C
-- **Filter Status Kadaluarsa** - Semua, Kadaluarsa, Akan Kadaluarsa, Belum Kadaluarsa
-- **Filter Stok** - Semua, Stok Menipis (<10)
-
-### Riwayat Transaksi
-1. Click tombol **"Riwayat"** di header
-2. Lihat semua transaksi stok masuk/keluar
-3. Detail: tanggal, reagen, tipe, jumlah, stok lama/baru, catatan
-4. Sorted by terbaru di atas
-
----
-
-## 🔒 Security & Best Practices
-
-### Keamanan
-- ✅ **Row Level Security (RLS)** enabled di Supabase
-- ✅ **Authentication Required** untuk semua operasi
-- ✅ **Protected Routes** menggunakan AuthGuard
-- ✅ **Environment Variables** tidak di-commit ke git
-- ✅ **HTTPS** otomatis di production (Vercel)
-
-### Best Practices
-- Database queries menggunakan Supabase client
-- Error handling yang proper
-- Loading states untuk UX yang baik
-- Responsive design untuk semua device
-- Email notifikasi non-blocking (async)
+🎉 Buka [http://localhost:3000](http://localhost:3000) di browser!
 
 ---
 
@@ -297,304 +479,307 @@ supabaCara Penggunaan
 
 ```
 daftar-reagen/
-├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── page.tsx           # Dashboard utama
-│   │   ├── layout.tsx         # Root layout
-│   │   ├── login/             # Halaman login
-│   │   ├── register/          # Halaman register
-│   │   └── history/           # Halaman riwayat transaksi
-│   ├── components/            # React Components
-│   │   ├── AddReagentModal.tsx
-│   │   ├── EditReagentModal.tsx
-│   │   ├── StockModal.tsx
-│   │   ├── AuthGuard.tsx
-│   │   ├── FilterBar.tsx
-│   │   ├── ReagentCard.tsx
-│   │   └── StatsCard.tsx
-│   └── lib/                   # Utilities
-│       ├── supabase.ts        # Supabase client & types
-│       └── utils.ts           # Helper functions
-├── supabase/
-│   └── functions/             # Edge Functions
-│       └── send-stock-notification/
-│           ├── index.ts       # Email notification function
-│           ├── deno.json      # Deno config
-│           └── function.json  # Function metadata
-├── public/                    # Static assets
-├── .env.local                 # Environment variables (tidak di-commit)
-├── .vercelignore             # Files to ignore saat deploy Vercel
-├── vercel.json               # Vercel configuration
-├── next.config.ts            # Next.js configuration
-├── tailwind.config.ts        # Tailwind CSS configuration
-├── tsconfig.json             # TypeScript configuration
-├── package.json              # Dependencies & scripts
-└── README.md                 # Dokumentasi ini
+│
+├── 📂 src/
+│   ├── 📂 app/                      # Next.js App Router
+│   │   ├── 📄 page.tsx              # Dashboard utama (/)
+│   │   ├── 📄 layout.tsx            # Root layout dengan AuthGuard
+│   │   ├── 📄 globals.css           # Global styles & Tailwind imports
+│   │   │
+│   │   ├── 📂 history/
+│   │   │   └── 📄 page.tsx          # Halaman riwayat transaksi
+│   │   │
+│   │   ├── 📂 login/
+│   │   │   └── 📄 page.tsx          # Halaman login
+│   │   │
+│   │   └── 📂 register/
+│   │       └── 📄 page.tsx          # Halaman registrasi
+│   │
+│   ├── 📂 components/               # React Components
+│   │   ├── 📄 AddReagentModal.tsx   # Modal form tambah reagen
+│   │   ├── 📄 EditReagentModal.tsx  # Modal form edit reagen
+│   │   ├── 📄 StockModal.tsx        # Modal transaksi stok
+│   │   ├── 📄 ReagentCard.tsx       # Card display reagen
+│   │   ├── 📄 StatsCard.tsx         # Card statistik dashboard
+│   │   ├── 📄 FilterBar.tsx         # Komponen filter dropdown
+│   │   └── 📄 AuthGuard.tsx         # HOC untuk protected routes
+│   │
+│   └── 📂 lib/                      # Utilities & Configuration
+│       ├── 📄 supabase.ts           # Supabase client & type definitions
+│       └── 📄 utils.ts              # Helper functions (formatDate, etc.)
+│
+├── 📂 supabase/
+│   └── 📂 functions/
+│       └── 📂 send-stock-notification/
+│           ├── 📄 index.ts          # Edge function handler
+│           ├── 📄 deno.json         # Deno configuration
+│           └── 📄 function.json     # Function metadata
+│
+├── 📂 public/                       # Static assets
+│
+├── 📄 migration-keep-history.sql    # Database migration script
+├── 📄 next.config.ts                # Next.js configuration
+├── 📄 postcss.config.mjs            # PostCSS configuration
+├── 📄 tailwind.config.ts            # Tailwind CSS configuration
+├── 📄 tsconfig.json                 # TypeScript configuration
+├── 📄 vercel.json                   # Vercel deployment config
+├── 📄 package.json                  # Dependencies & scripts
+└── 📄 README.md                     # Dokumentasi project
 ```
 
 ---
 
-## 🛠️ Development
+## 📚 Dokumentasi Teknis
 
-### Available Scripts
+### Type Definitions
 
-```bash
-# Development server
-npm run dev
+```typescript
+// lib/supabase.ts
 
-# Build for production
-npm run build
+export type Reagent = {
+  id: string
+  name: string
+  type: 'Cair' | 'Padat' | 'Reagen Suhu 2-8°C' | null
+  batch_number: string | null
+  arrival_date: string | null
+  expiry_date: string | null
+  brand: string | null
+  stock_in: number
+  stock_out: number
+  stock: number
+  initial_weight: number | null
+  unit: string
+  created_at: string
+  updated_at: string
+}
 
-# Start production server
-npm start
-
-# Lint code
-npm run lint
+export type Transaction = {
+  id: string
+  reagent_id: string | null
+  reagent_name: string
+  reagent_unit: string
+  type: 'in' | 'out'
+  amount: number
+  old_stock: number
+  new_stock: number
+  notes: string | null
+  created_at: string
+}
 ```
 
-### Supabase CLI Commands
+### Utility Functions
 
-```bash
-# Login ke Supabase
-supabase login
+```typescript
+// lib/utils.ts
 
-# Link ke project
-supabase link --project-ref your-project-ref
+// Format tanggal ke format Indonesia
+formatDate(date: string | null): string
+// Output: "14 Jan 2026"
 
-# Deploy Edge Function
-supabase functions deploy send-stock-notification
+// Cek status kadaluarsa
+getExpiryStatus(expiryDate: string | null): 'expired' | 'expiring' | 'valid' | 'none'
 
-# List functions
-supabase functions list
+// Tentukan level stok berdasarkan berat sediaan
+getStockLevel(stock: number, initialWeight?: number | null, unit?: string, type?: string | null): 'low' | 'high'
 
-# View logs
-supabase functions logs send-stock-notification
+// Cek apakah user adalah admin
+isAdmin(email: string | null | undefined): boolean
 
-# Delete function (jika perlu)
-supabase functions delete send-stock-notification
+// Utility untuk class names
+cn(...classes: (string | boolean | undefined)[]): string
+```
+
+### Database Schema
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                         REAGENTS                              │
+├──────────────────────────────────────────────────────────────┤
+│ id              │ UUID        │ PK, auto-generated           │
+│ name            │ TEXT        │ NOT NULL                     │
+│ type            │ TEXT        │ 'Cair'|'Padat'|'Suhu 2-8°C' │
+│ batch_number    │ TEXT        │ nullable                     │
+│ arrival_date    │ DATE        │ nullable                     │
+│ expiry_date     │ DATE        │ nullable                     │
+│ brand           │ TEXT        │ nullable                     │
+│ stock           │ NUMERIC     │ current stock                │
+│ stock_in        │ NUMERIC     │ total masuk                  │
+│ stock_out       │ NUMERIC     │ total keluar                 │
+│ initial_weight  │ NUMERIC     │ berat sediaan                │
+│ unit            │ TEXT        │ 'ml'|'L'|'g'|'kg'           │
+│ created_at      │ TIMESTAMPTZ │ auto                         │
+│ updated_at      │ TIMESTAMPTZ │ auto                         │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                              │ ON DELETE SET NULL
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                       TRANSACTIONS                            │
+├──────────────────────────────────────────────────────────────┤
+│ id              │ UUID        │ PK, auto-generated           │
+│ reagent_id      │ UUID        │ FK → reagents.id (nullable)  │
+│ reagent_name    │ TEXT        │ NOT NULL (preserved)         │
+│ reagent_unit    │ TEXT        │ NOT NULL (preserved)         │
+│ type            │ TEXT        │ 'in' | 'out'                 │
+│ amount          │ NUMERIC     │ jumlah perubahan             │
+│ old_stock       │ NUMERIC     │ stok sebelum                 │
+│ new_stock       │ NUMERIC     │ stok sesudah                 │
+│ notes           │ TEXT        │ catatan transaksi            │
+│ created_at      │ TIMESTAMPTZ │ auto                         │
+└──────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────┐
+│                         PROFILES                              │
+├──────────────────────────────────────────────────────────────┤
+│ id              │ UUID        │ PK, FK → auth.users          │
+│ email           │ TEXT        │ NOT NULL                     │
+│ username        │ TEXT        │ UNIQUE, NOT NULL             │
+│ full_name       │ TEXT        │ nullable                     │
+│ created_at      │ TIMESTAMPTZ │ auto                         │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🎯 Roadmap & Future Features
+## 🔐 Keamanan
 
-- [ ] Export data ke Excel/CSV
-- [ ] Print labels untuk reagen
-- [ ] Barcode/QR code scanning
-- [ ] Multi-user dengan role management
-- [ ] Email reminder untuk reagen hampir kadaluarsa
-- [ ] Dashboard analytics & reports
+### 1. Authentication Layer
+
+- ✅ **Supabase Auth** - Secure authentication dengan JWT
+- ✅ **Password Hashing** - Bcrypt di server-side
+- ✅ **Session Management** - Automatic token refresh
+- ✅ **Protected Routes** - `AuthGuard` component
+
+### 2. Authorization Layer
+
+- ✅ **Role-Based Access** - Admin vs User biasa
+- ✅ **Double Validation** - Check di client + server
+- ✅ **Admin Whitelist** - Hardcoded admin emails
+
+### 3. Data Security
+
+- ✅ **Row Level Security (RLS)** - Database-level security
+- ✅ **Environment Variables** - Secrets tidak exposed ke client
+- ✅ **Type Safety** - TypeScript mencegah runtime errors
+- ✅ **Input Validation** - Form validation + DB constraints
+
+### 4. API Security
+
+- ✅ **HTTPS Only** - Encrypted communication
+- ✅ **CORS Headers** - Configured di Edge Functions
+- ✅ **API Key Protection** - Anon key dengan RLS
+
+---
+
+## 🌐 Deployment
+
+### Deploy ke Vercel (Recommended)
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Login
+vercel login
+
+# Deploy
+vercel
+
+# Deploy ke production
+vercel --prod
+```
+
+**Environment Variables di Vercel:**
+
+1. Buka **Vercel Dashboard** → Project → **Settings** → **Environment Variables**
+2. Tambahkan:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+### Konfigurasi Vercel
+
+File `vercel.json` sudah dikonfigurasi:
+
+```json
+{
+  "framework": "nextjs"
+}
+```
+
+---
+
+## 🗺 Roadmap
+
+### ✅ Completed (v0.1.0)
+
+- [x] Dashboard dengan statistik real-time
+- [x] CRUD reagen lengkap
+- [x] Transaksi stok masuk/keluar
+- [x] Sistem peringatan kadaluarsa
+- [x] Perhitungan stok minimum dinamis
+- [x] Riwayat transaksi dengan filter
+- [x] Export data ke Excel
+- [x] Autentikasi email/username
+- [x] Role-based access control
+- [x] Email notification via Edge Function
+- [x] Soft delete dengan history preservation
+- [x] Responsive design (mobile-friendly)
+
+### 🔄 In Progress
+
+- [ ] Grafik analytics lebih detail
+- [ ] Performance optimization
+
+### 📋 Planned
+
+- [ ] Real-time updates dengan Supabase Subscriptions
+- [ ] Bulk import reagen dari Excel
+- [ ] Push notification untuk stok rendah
+- [ ] Dashboard analytics advanced
+- [ ] Multi-language support (EN/ID)
 - [ ] Dark mode
+- [ ] Print report ke PDF
+- [ ] Barcode/QR code scanner
 - [ ] Mobile app (React Native)
-- [ ] Integration dengan sistem ERP
 
 ---
 
-## 🐛 Known Issues & Limitations
+## 🤝 Kontribusi
 
-1. **Email di Spam** - Email pertama mungkin masuk spam (tandai sebagai "Not Spam")
-2. **TypeScript Errors di VS Code** - Error di folder `supabase/functions` adalah normal (Deno runtime)
-3. **Email Formatting** - Beberapa email client mungkin render HTML berbeda
+Kontribusi sangat diterima! Silakan:
 
----
-
-## 💡 Tips & Tricks
-
-### Performance
-- Database indexes sudah dioptimalkan
-- Edge Functions menggunakan Deno (lebih cepat dari Node.js)
-- Vercel CDN untuk assets static
-
-### Monitoring
-```bash
-# Check Edge Function status
-supabase functions list
-
-# View recent logs
-supabase functions logs send-stock-notification --limit 50
-
-# Monitor real-time logs
-supabase functions logs send-stock-notification --follow
-```
-
-### Backup Database
-```bash
-# Export dari Supabase Dashboard
-Settings → Database → Backups
-
-# Atau gunakan pg_dump (advanced)
-```
+1. **Fork** repository ini
+2. Buat **branch** baru (`git checkout -b feature/AmazingFeature`)
+3. **Commit** perubahan (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** ke branch (`git push origin feature/AmazingFeature`)
+5. Buat **Pull Request**
 
 ---
 
-## 🤝 Contributing
+## 📄 Lisensi
 
-Contributions are welcome! Jika ingin berkontribusi:
-
-1. Fork repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
+Private Project - All Rights Reserved
 
 ---
 
-## 📄 License
+## 📞 Kontak
 
-This project is licensed under the MIT License.
-
----
-
-## 👨‍💻 Author
-
-**PharmStock Development Team**
+Untuk pertanyaan atau dukungan, silakan hubungi tim pengembang.
 
 ---
 
-## 🙏 Acknowledgments
+<div align="center">
 
-- [Next.js](https://nextjs.org/) - React framework
-- [Supabase](https://supabase.com/) - Backend as a Service
-- [Vercel](https://vercel.com/) - Deployment platform
-- [Tailwind CSS](https://tailwindcss.com/) - CSS framework
-- [Lucide](https://lucide.dev/) - Icon library
+**PharmStock** - Sistem Manajemen Inventori Reagen Laboratorium
+
+Made with ❤️ using Next.js, React, and Supabase
 
 ---
 
-## 📞 Support
+![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19.2.3-61DAFB?style=flat-square&logo=react&logoColor=black)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
 
-Jika mengalami masalah atau punya pertanyaan:
+**Last Updated**: January 14, 2026 | **Version**: 0.1.0
 
-1. Check dokumentasi di atas
-2. Lihat Supabase logs: `supabase functions logs send-stock-notification`
-3. Check browser console (F12) untuk error frontend
-4. Verifikasi environment variables sudah benar
-
----
-
-**Happy Coding! 🚀**a mungkin masuk ke folder Spam. Tandai sebagai "Not Spam".
-
----
-
-## 🌐 Deploy to Production
-
-### A. Deploy ke Vercel
-
-#### 1. Push to GitHub
-```bash
-git add .
-git commit -m "Ready for deployment"
-git push origin main
-```
-
-#### 2. Import ke Vercel
-1. Buka [vercel.com](https://vercel.com) dan sign in dengan GitHub
-2. Click "Add New Project"
-3. Select repository Anda
-4. Click "Import"
-
-#### 3. Configure Environment Variables ⚠️ PENTING
-Tambahkan di Vercel Dashboard → Settings → Environment Variables:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
-```
-
-#### 4. Deploy
-- Click "Deploy"
-- Tunggu build selesai (~2 menit)
-- Aplikasi live di `your-project.vercel.app`
-
-### B. Deploy Edge Function ke Supabase
-
-Edge Function sudah otomatis deployed saat menjalankan:
-```bash
-supabase functions deploy send-stock-notification
-```
-
-**Function URL akan otomatis tersedia di:**
-```
-https://your-project.supabase.co/functions/v1/send-stock-notification
-```
-
-### Verifikasi Deployment
-
-1. **Cek Vercel:**
-   - Buka URL production Anda
-   - Test login dan fungsi aplikasi
-
-2. **Cek Edge Function:**
-   ```bash
-   supabase functions list
-   ```
-   
-   Output:
-   ```
-   NAME                           STATUS    REGION
-   send-stock-notification        ACTIVE    us-east-1
-   ```
-
-3. **Test Email di Production:**
-   - Login ke aplikasi production
-   - Kelola stok
-   - Cek email masuk
-
-### Troubleshooting
-
-**Build Error di Vercel:**
-- Pastikan environment variables sudah diset
-- Variables harus prefix `NEXT_PUBLIC_`
-- Test build lokal: `npm run build`
-
-**Email Tidak Terkirim:**
-```bash
-# Cek logs Edge Function
-supabase functions logs send-stock-notification
-
-# Re-deploy jika perlu
-supabase functions deploy send-stock-notification
-```
-
-2. **Import to Vercel**
-   - Go to [vercel.com](https://vercel.com) and sign in with GitHub
-   - Click "Add New Project"
-   - Select your `Sistem-Data-Reagen` repository
-   - Click "Import"
-
-3. **Configure Environment Variables** ⚠️ IMPORTANT
-   - Before deploying, add these environment variables in Vercel:
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=https://omordpoktvfysdlcgeim.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-   ```
-   - Get from: `.env.local` file or Supabase Dashboard → Project Settings → API
-
-4. **Deploy**
-   - Click "Deploy"
-   - Wait for build to complete
-   - Your app will be live at `your-project.vercel.app`
-
-### Troubleshooting Build Errors
-
-If you get "supabaseUrl is required" error:
-- Make sure environment variables are set in Vercel dashboard
-- Variables must start with `NEXT_PUBLIC_` to be accessible in client
-
-## 📖 Usage
-
-- **Add Reagent**: Click "+ Add Reagent" button
-- **Manage Stock**: Click "Manage Stock" on any card
-- **Filter**: Use search and filter controls
-- **Alerts**: Red = Expired/Low Stock, Yellow = Expiring Soon
-
-## 🔒 Security
-
-⚠️ Default setup uses public access. For production:
-- Implement Supabase Auth
-- Update RLS policies
-- Add rate limiting
-
-## 📄 License
-
-MIT License
+</div>

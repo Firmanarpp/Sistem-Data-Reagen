@@ -85,11 +85,13 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
 
       if (updateError) throw updateError
 
-      // Add transaction record
+      // Add transaction record (dengan nama reagen untuk history)
       const { error: transactionError } = await supabase
         .from('transactions')
         .insert([{
           reagent_id: reagent.id,
+          reagent_name: reagent.name,
+          reagent_unit: reagent.unit,
           type: transactionType,
           amount: numAmount,
           old_stock: oldStock,

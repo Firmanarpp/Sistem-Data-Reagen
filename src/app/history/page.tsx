@@ -8,15 +8,15 @@ import Link from 'next/link'
 
 type TransactionWithReagent = {
   id: string
-  reagent_id: string
+  reagent_id: string | null
+  reagent_name: string
+  reagent_unit: string
   type: 'in' | 'out'
   amount: number
   old_stock: number
   new_stock: number
   notes: string | null
   created_at: string
-  reagent_name: string
-  reagent_unit: string
   reagent_brand: string | null
   reagent_batch_number: string | null
 }
@@ -38,7 +38,7 @@ export default function TransactionHistoryPage() {
     try {
       setLoading(true)
       
-      // Query transactions with reagent data
+      // Query transactions (sudah ada reagent_name dan reagent_unit)
       const { data: transactionsData, error: transactionsError } = await supabase
         .from('transactions')
         .select('*')
@@ -46,23 +46,20 @@ export default function TransactionHistoryPage() {
 
       if (transactionsError) throw transactionsError
 
-      // Get reagent data for each transaction
-      const reagentIds = [...new Set(transactionsData?.map(t => t.reagent_id) || [])]
-      const { data: reagentsData, error: reagentsError } = await supabase
+      // Get reagent data hanya untuk yang masih ada (untuk brand & batch number)
+      const reagentIds = [...new Set(transactionsData?.filter(t => t.reagent_id).map(t => t.reagent_id) || [])]
+      const { data: reagentsData } = await supabase
         .from('reagents')
-        .select('id, name, unit, brand, batch_number')
+        .select('id, brand, batch_number')
         .in('id', reagentIds)
-
-      if (reagentsError) throw reagentsError
 
       // Combine data
       const reagentMap = new Map(reagentsData?.map(r => [r.id, r]))
       const combined = transactionsData?.map(t => ({
         ...t,
-        reagent_name: reagentMap.get(t.reagent_id)?.name || 'Unknown',
-        reagent_unit: reagentMap.get(t.reagent_id)?.unit || '',
-        reagent_brand: reagentMap.get(t.reagent_id)?.brand || null,
-        reagent_batch_number: reagentMap.get(t.reagent_id)?.batch_number || null
+        // Gunakan data dari reagent jika masih ada, jika tidak gunakan dari transaksi
+        reagent_brand: t.reagent_id ? reagentMap.get(t.reagent_id)?.brand || null : null,
+        reagent_batch_number: t.reagent_id ? reagentMap.get(t.reagent_id)?.batch_number || null : null
       })) || []
 
       setTransactions(combined)
@@ -256,6 +253,9 @@ export default function TransactionHistoryPage() {
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {transaction.reagent_name}
+                        {!transaction.reagent_id && (
+                          <span className="ml-2 text-xs text-gray-500 italic">(dihapus)</span>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {transaction.type === 'in' ? (
