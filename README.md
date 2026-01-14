@@ -79,9 +79,9 @@ Dashboard utama menampilkan overview lengkap kondisi inventori:
 🔄 Sortir        → Berdasarkan nama atau pemakaian tertinggi
 ```
 
-**Export Data:**
-- 📥 Export seluruh data ke format Excel (.xlsx)
-- Filter yang diterapkan ikut ter-export
+**Sortir Data:**
+- 🔄 Urutkan berdasarkan nama (A-Z)
+- 📊 Urutkan berdasarkan pemakaian tertinggi (stock_out)
 
 </details>
 
@@ -179,9 +179,10 @@ if (unit === 'L')  normalizedWeight = initialWeight * 1000
 └─────────────────────────────────────────────────────┘
 ```
 
-**Visualisasi Data:**
-- 📈 Grafik tren stok harian menggunakan **Recharts**
-- Export hasil filter ke Excel
+**Filter Lengkap:**
+- 📅 Filter berdasarkan tanggal (range)
+- 🔍 Filter nama reagen, batch number, brand
+- 📊 Tampilan tabel terstruktur dengan semua detail transaksi
 
 **Preservasi Data (Soft Delete):**
 ```
@@ -214,7 +215,7 @@ Ketika reagen dihapus:
 |-------|:-----:|:----------:|
 | View Dashboard | ✅ | ✅ |
 | View History | ✅ | ✅ |
-| Export Excel | ✅ | ✅ |
+| Filter & Search | ✅ | ✅ |
 | Tambah Reagen | ✅ | ❌ |
 | Edit Reagen | ✅ | ❌ |
 | Hapus Reagen | ✅ | ❌ |
@@ -291,8 +292,8 @@ Form Input:
 | Library | Versi | Kegunaan |
 |---------|-------|----------|
 | `date-fns` | 4.1.0 | Formatting dan manipulasi tanggal |
-| `xlsx` | 0.18.5 | Export data ke Excel |
-| `recharts` | 3.6.0 | Visualisasi grafik interaktif |
+| `xlsx` | 0.18.5 | Library untuk future enhancement export |
+| `recharts` | 3.6.0 | Library untuk future enhancement grafik |
 
 ---
 
