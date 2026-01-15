@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import { ArrowLeft, Calendar, ArrowUpCircle, ArrowDownCircle, Package } from 'lucide-react'
+import { ArrowLeft, Calendar, ArrowUpCircle, ArrowDownCircle, Package, Printer } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
+import Navbar from '@/components/Navbar'
+import { useRouter } from 'next/navigation'
 
 type TransactionWithReagent = {
   id: string
@@ -16,12 +18,14 @@ type TransactionWithReagent = {
   old_stock: number
   new_stock: number
   notes: string | null
+  user_email: string | null
   created_at: string
   reagent_brand: string | null
   reagent_batch_number: string | null
 }
 
 export default function TransactionHistoryPage() {
+  const router = useRouter()
   const [transactions, setTransactions] = useState<TransactionWithReagent[]>([])
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState('')
@@ -29,10 +33,22 @@ export default function TransactionHistoryPage() {
   const [searchName, setSearchName] = useState('')
   const [searchBatch, setSearchBatch] = useState('')
   const [searchBrand, setSearchBrand] = useState('')
+  const [userEmail, setUserEmail] = useState('')
 
   useEffect(() => {
     loadTransactions()
+    loadUser()
   }, [])
+
+  async function loadUser() {
+    const { data: { user } } = await supabase.auth.getUser()
+    setUserEmail(user?.email || '')
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   async function loadTransactions() {
     try {
@@ -114,26 +130,26 @@ export default function TransactionHistoryPage() {
     })
   }
 
+  const handlePrint = () => {
+    window.print()
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-gray-400 hover:text-gray-600">
-              <ArrowLeft className="h-6 w-6" />
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <Package className="h-7 w-7 text-blue-600" />
-                Riwayat Transaksi
-              </h1>
-              <p className="text-sm text-gray-600 mt-1">Catatan transaksi pengelolaan stok</p>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar 
+        userEmail={userEmail}
+        onLogout={handleLogout}
+      />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <Package className="h-7 w-7 text-blue-600" />
+            Riwayat Transaksi
+          </h2>
+          <p className="text-sm text-gray-600 mt-1">Catatan transaksi pengelolaan stok</p>
+        </div>
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Riwayat</h2>
           
@@ -195,18 +211,27 @@ export default function TransactionHistoryPage() {
             </div>
             
             <div className="flex items-center justify-between pt-2">
-              <button
-                onClick={() => {
-                  setStartDate('')
-                  setEndDate('')
-                  setSearchName('')
-                  setSearchBatch('')
-                  setSearchBrand('')
-                }}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Reset Semua Filter
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setStartDate('')
+                    setEndDate('')
+                    setSearchName('')
+                    setSearchBatch('')
+                    setSearchBrand('')
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Reset Semua Filter
+                </button>
+                <button
+                  onClick={handlePrint}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2 no-print"
+                >
+                  <Printer className="h-4 w-4" />
+                  Cetak Riwayat
+                </button>
+              </div>
               
               {filteredTransactions.length !== transactions.length && (
                 <div className="text-sm text-gray-600">
@@ -238,6 +263,7 @@ export default function TransactionHistoryPage() {
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal & Waktu</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reagen</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pengguna</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Lama</th>
@@ -256,6 +282,9 @@ export default function TransactionHistoryPage() {
                         {!transaction.reagent_id && (
                           <span className="ml-2 text-xs text-gray-500 italic">(dihapus)</span>
                         )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {transaction.user_email || '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {transaction.type === 'in' ? (

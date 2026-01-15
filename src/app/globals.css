@@ -29,3 +29,37 @@ body {
   }
 }
 
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  
+  header {
+    position: static !important;
+  }
+  
+  button,
+  .no-print {
+    display: none !important;
+  }
+  
+  table {
+    page-break-inside: auto;
+  }
+  
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  
+  thead {
+    display: table-header-group;
+  }
+  
+  tfoot {
+    display: table-footer-group;
+  }
+}

@@ -36,5 +36,6 @@ export type Transaction = {
   old_stock: number
   new_stock: number
   notes: string | null
+  user_email: string | null
   created_at: string
 }

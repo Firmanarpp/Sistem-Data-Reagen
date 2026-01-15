@@ -7,6 +7,7 @@ import ReagentCard from '@/components/ReagentCard'
 import StatsCard from '@/components/StatsCard'
 import FilterBar from '@/components/FilterBar'
 import AddReagentModal from '@/components/AddReagentModal'
+import Navbar from '@/components/Navbar'
 import { getExpiryStatus, getStockLevel, isAdmin } from '@/lib/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -21,7 +22,6 @@ export default function DashboardPage() {
   const [stockFilter, setStockFilter] = useState('')
   const [showAddModal, setShowAddModal] = useState(false)
   const [userEmail, setUserEmail] = useState('')
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [sortBy, setSortBy] = useState<'name' | 'usage'>('usage')
 
   useEffect(() => {
@@ -95,107 +95,11 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo & Brand */}
-            <div className="flex items-center gap-2">
-              <Package className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-              <div>
-                <h1 className="text-lg sm:text-xl font-bold text-gray-900">
-                  PharmStock
-                </h1>
-                {userEmail && (
-                  <p className="hidden sm:block text-xs text-gray-500">
-                    {userEmail}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-3">
-              <Link
-                href="/history"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-50 flex items-center gap-2 transition-colors text-sm font-medium"
-              >
-                <History className="h-4 w-4" />
-                <span>Riwayat</span>
-              </Link>
-              {isAdmin(userEmail) && (
-                <button
-                  onClick={() => setShowAddModal(true)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors text-sm font-medium shadow-sm"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>Tambah Reagen</span>
-                </button>
-              )}
-              <button
-                onClick={handleLogout}
-                className="text-red-600 hover:text-red-700 px-3 py-2 rounded-lg hover:bg-red-50 flex items-center gap-2 transition-colors text-sm font-medium"
-                title="Keluar"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden lg:inline">Keluar</span>
-              </button>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-gray-200">
-              <nav className="flex flex-col gap-2">
-                {userEmail && (
-                  <div className="px-3 py-2 text-sm text-gray-600 bg-gray-50 rounded-lg mb-2">
-                    {userEmail}
-                  </div>
-                )}
-                <Link
-                  href="/history"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-gray-700 hover:text-blue-600 px-3 py-2.5 rounded-lg hover:bg-gray-50 flex items-center gap-3 transition-colors font-medium"
-                >
-                  <History className="h-5 w-5" />
-                  <span>Riwayat</span>
-                </Link>
-                {isAdmin(userEmail) && (
-                  <button
-                    onClick={() => {
-                      setShowAddModal(true)
-                      setMobileMenuOpen(false)
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2.5 rounded-lg flex items-center gap-3 transition-colors font-medium text-left"
-                  >
-                    <Plus className="h-5 w-5" />
-                    <span>Tambah Reagen</span>
-                  </button>
-                )}
-                <button
-                  onClick={handleLogout}
-                  className="text-red-600 hover:text-red-700 px-3 py-2.5 rounded-lg hover:bg-red-50 flex items-center gap-3 transition-colors font-medium text-left"
-                >
-                  <LogOut className="h-5 w-5" />
-                  <span>Keluar</span>
-                </button>
-              </nav>
-            </div>
-          )}
-        </div>
-      </header>
+      <Navbar 
+        userEmail={userEmail}
+        onLogout={handleLogout}
+        onAddReagent={() => setShowAddModal(true)}
+      />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

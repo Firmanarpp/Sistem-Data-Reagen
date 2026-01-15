@@ -96,7 +96,8 @@ export default function StockModal({ reagent, onClose, onSuccess }: StockModalPr
           amount: numAmount,
           old_stock: oldStock,
           new_stock: newStock,
-          notes: notes || null
+          notes: notes || null,
+          user_email: user?.email || null
         }])
 
       if (transactionError) throw transactionError
