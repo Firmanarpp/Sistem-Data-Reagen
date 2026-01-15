@@ -131,7 +131,298 @@ export default function TransactionHistoryPage() {
   }
 
   const handlePrint = () => {
-    window.print()
+    const printWindow = window.open('', '_blank')
+    if (!printWindow) return
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Laporan Riwayat Transaksi - PharmStock</title>
+          <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              padding: 20px;
+              color: #1f2937;
+              background: white;
+            }
+            
+            .header {
+              border-bottom: 3px solid #2563eb;
+              padding-bottom: 15px;
+              margin-bottom: 20px;
+            }
+            
+            .header h1 {
+              font-size: 24px;
+              color: #1f2937;
+              margin-bottom: 5px;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            }
+            
+            .header .subtitle {
+              color: #6b7280;
+              font-size: 14px;
+            }
+            
+            .info-section {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 10px;
+              margin-bottom: 20px;
+              padding: 12px;
+              background: #f9fafb;
+              border-radius: 6px;
+              font-size: 13px;
+            }
+            
+            .info-item {
+              display: flex;
+              gap: 8px;
+            }
+            
+            .info-label {
+              font-weight: 600;
+              color: #374151;
+            }
+            
+            .info-value {
+              color: #6b7280;
+            }
+            
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 20px;
+              font-size: 12px;
+            }
+            
+            thead {
+              background: #1f2937;
+              color: white;
+            }
+            
+            th {
+              padding: 12px 8px;
+              text-align: left;
+              font-weight: 600;
+              font-size: 11px;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+            
+            th.text-right {
+              text-align: right;
+            }
+            
+            tbody tr {
+              border-bottom: 1px solid #e5e7eb;
+            }
+            
+            tbody tr:nth-child(even) {
+              background: #f9fafb;
+            }
+            
+            tbody tr:hover {
+              background: #f3f4f6;
+            }
+            
+            td {
+              padding: 10px 8px;
+              color: #374151;
+            }
+            
+            td.text-right {
+              text-align: right;
+            }
+            
+            .badge {
+              display: inline-block;
+              padding: 4px 8px;
+              border-radius: 12px;
+              font-size: 11px;
+              font-weight: 600;
+            }
+            
+            .badge-in {
+              background: #d1fae5;
+              color: #065f46;
+            }
+            
+            .badge-out {
+              background: #fee2e2;
+              color: #991b1b;
+            }
+            
+            .amount-in {
+              color: #059669;
+              font-weight: 600;
+            }
+            
+            .amount-out {
+              color: #dc2626;
+              font-weight: 600;
+            }
+            
+            .footer {
+              margin-top: 30px;
+              padding-top: 15px;
+              border-top: 2px solid #e5e7eb;
+              font-size: 11px;
+              color: #6b7280;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+            
+            .summary {
+              margin-top: 10px;
+              padding: 12px;
+              background: #eff6ff;
+              border-left: 4px solid #2563eb;
+              font-size: 13px;
+            }
+            
+            .summary-item {
+              display: flex;
+              justify-content: space-between;
+              padding: 4px 0;
+            }
+            
+            .summary-label {
+              color: #374151;
+            }
+            
+            .summary-value {
+              font-weight: 600;
+              color: #1f2937;
+            }
+            
+            @media print {
+              body {
+                padding: 10px;
+              }
+              
+              @page {
+                margin: 15mm;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>
+              📦 Laporan Riwayat Transaksi Stok
+            </h1>
+            <div class="subtitle">PharmStock - Pharmaceutical Inventory Management System</div>
+          </div>
+          
+          <div class="info-section">
+            <div class="info-item">
+              <span class="info-label">Tanggal Cetak:</span>
+              <span class="info-value">${new Date().toLocaleString('id-ID', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              })}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total Transaksi:</span>
+              <span class="info-value">${filteredTransactions.length} transaksi</span>
+            </div>
+            ${startDate ? `
+            <div class="info-item">
+              <span class="info-label">Periode:</span>
+              <span class="info-value">${startDate} s/d ${endDate || 'Sekarang'}</span>
+            </div>
+            ` : ''}
+            ${userEmail ? `
+            <div class="info-item">
+              <span class="info-label">Dicetak oleh:</span>
+              <span class="info-value">${userEmail}</span>
+            </div>
+            ` : ''}
+          </div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 12%">Tanggal & Waktu</th>
+                <th style="width: 20%">Reagen</th>
+                <th style="width: 18%">Pengguna</th>
+                <th style="width: 10%">Jenis</th>
+                <th class="text-right" style="width: 12%">Jumlah</th>
+                <th class="text-right" style="width: 10%">Stok Lama</th>
+                <th class="text-right" style="width: 10%">Stok Baru</th>
+                <th style="width: 8%">Catatan</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filteredTransactions.map(transaction => `
+                <tr>
+                  <td>${formatDateTime(transaction.created_at)}</td>
+                  <td>
+                    <strong>${transaction.reagent_name}</strong>
+                    ${!transaction.reagent_id ? '<br><small style="color: #9ca3af; font-style: italic;">(dihapus)</small>' : ''}
+                  </td>
+                  <td style="font-size: 11px;">${transaction.user_email || '-'}</td>
+                  <td>
+                    <span class="badge ${transaction.type === 'in' ? 'badge-in' : 'badge-out'}">
+                      ${transaction.type === 'in' ? '↑ Stok Masuk' : '↓ Stok Keluar'}
+                    </span>
+                  </td>
+                  <td class="text-right ${transaction.type === 'in' ? 'amount-in' : 'amount-out'}">
+                    ${transaction.type === 'in' ? '+' : '-'}${transaction.amount.toFixed(1)} ${transaction.reagent_unit}
+                  </td>
+                  <td class="text-right">${transaction.old_stock.toFixed(1)} ${transaction.reagent_unit}</td>
+                  <td class="text-right"><strong>${transaction.new_stock.toFixed(1)} ${transaction.reagent_unit}</strong></td>
+                  <td style="font-size: 11px;">${transaction.notes || '-'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          
+          <div class="summary">
+            <div class="summary-item">
+              <span class="summary-label">Total Stok Masuk:</span>
+              <span class="summary-value">${filteredTransactions.filter(t => t.type === 'in').length} transaksi</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Total Stok Keluar:</span>
+              <span class="summary-value">${filteredTransactions.filter(t => t.type === 'out').length} transaksi</span>
+            </div>
+          </div>
+          
+          <div class="footer">
+            <div>PharmStock © ${new Date().getFullYear()} - Pharmaceutical Inventory Management</div>
+            <div>Halaman 1 dari 1</div>
+          </div>
+          
+          <script>
+            window.onload = function() {
+              window.print();
+              window.onafterprint = function() {
+                window.close();
+              }
+            }
+          </script>
+        </body>
+      </html>
+    `
+
+    printWindow.document.write(printContent)
+    printWindow.document.close()
   }
 
   return (
